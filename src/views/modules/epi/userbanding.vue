@@ -6,8 +6,6 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('epi:userbanding:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('epi:userbanding:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -17,28 +15,19 @@
       @selection-change="selectionChangeHandle"
       style="width: 100%;">
       <el-table-column
-        type="selection"
+        prop="userId"
         header-align="center"
         align="center"
-        width="50">
-      </el-table-column>
-      <el-table-column
-        prop="id"
-        header-align="center"
-        align="center"
-        label="主键">
+        label="用户(姓名)">
+        <template slot-scope="scope">
+          {{scope.row.username}}({{scope.row.name}})
+        </template>
       </el-table-column>
       <el-table-column
         prop="accountId"
         header-align="center"
         align="center"
-        label="第三方登录ID 微信ID qqID">
-      </el-table-column>
-      <el-table-column
-        prop="userId"
-        header-align="center"
-        align="center"
-        label="用户ID">
+        label="第三方登录ID">
       </el-table-column>
       <el-table-column
         prop="nickname"
@@ -56,7 +45,12 @@
         prop="type"
         header-align="center"
         align="center"
-        label="类型 0：微信 1:QQ 2：其他">
+        label="类型">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.type === 0" size="small" type="danger">微信</el-tag>
+          <el-tag v-else-if="scope.row.type === 1" size="small" type="success">QQ</el-tag>
+          <el-tag v-else size="small">其他</el-tag>
+        </template>
       </el-table-column>
       <el-table-column
         prop="updateTime"
@@ -69,17 +63,6 @@
         header-align="center"
         align="center"
         label="备注">
-      </el-table-column>
-      <el-table-column
-        fixed="right"
-        header-align="center"
-        align="center"
-        width="150"
-        label="操作">
-        <template slot-scope="scope">
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
-          <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
-        </template>
       </el-table-column>
     </el-table>
     <el-pagination

@@ -4,21 +4,27 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
-    <el-form-item label="用户	外键，用户表id" prop="userId">
-      <el-input v-model="dataForm.userId" placeholder="用户	外键，用户表id"></el-input>
+    <el-form-item label="用户(姓名)：" prop="username" label-width="100">
+      <span>{{ dataForm.username }}({{ dataForm.name }})</span>
     </el-form-item>
-    <el-form-item label="部门id	外键，部门机构表id" prop="deptId">
-      <el-input v-model="dataForm.deptId" placeholder="部门id	外键，部门机构表id"></el-input>
-    </el-form-item>
-    <el-form-item label="创建时间" prop="createTime">
-      <el-input v-model="dataForm.createTime" placeholder="创建时间"></el-input>
-    </el-form-item>
-    <el-form-item label="更新时间" prop="updateTime">
-      <el-input v-model="dataForm.updateTime" placeholder="更新时间"></el-input>
-    </el-form-item>
-    <el-form-item label="状态	0：正常，-1：异常" prop="status">
-      <el-input v-model="dataForm.status" placeholder="状态	0：正常，-1：异常"></el-input>
-    </el-form-item>
+      <el-form-item label="所属部门" prop="deptId">
+        <el-popover
+          ref="menuListPopover"
+          placement="bottom-start"
+          trigger="click">
+          <el-tree
+            :data="menuList"
+            :props="menuListTreeProps"
+            node-key="id"
+            ref="menuListTree"
+            @current-change="menuListTreeCurrentChangeHandle"
+            :default-expand-all="true"
+            :highlight-current="true"
+            :expand-on-click-node="false">
+          </el-tree>
+        </el-popover>
+        <el-input v-model="dataForm.parentName" v-popover:menuListPopover :readonly="true" placeholder="点击选择所属部门" class="menu-list__input"></el-input>
+      </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
@@ -28,6 +34,7 @@
 </template>
 
 <script>
+  import { treeDataTranslate } from '@/utils'
   export default {
     data () {
       return {
@@ -36,51 +43,67 @@
           id: 0,
           userId: '',
           deptId: '',
-          createTime: '',
-          updateTime: '',
-          status: ''
+          parentId: 0,
+          parentName: '',
+          name: '',
+          username: ''
         },
         dataRule: {
-          userId: [
-            { required: true, message: '用户	外键，用户表id不能为空', trigger: 'blur' }
-          ],
           deptId: [
-            { required: true, message: '部门id	外键，部门机构表id不能为空', trigger: 'blur' }
-          ],
-          createTime: [
-            { required: true, message: '创建时间不能为空', trigger: 'blur' }
-          ],
-          updateTime: [
-            { required: true, message: '更新时间不能为空', trigger: 'blur' }
-          ],
-          status: [
-            { required: true, message: '状态	0：正常，-1：异常不能为空', trigger: 'blur' }
+            { required: true, message: '部门', trigger: 'blur' }
           ]
+        },
+        menuList: [],
+        menuListTreeProps: {
+          label: 'name',
+          children: 'children'
         }
       }
     },
     methods: {
       init (id) {
         this.dataForm.id = id || 0
-        this.visible = true
-        this.$nextTick(() => {
-          this.$refs['dataForm'].resetFields()
-          if (this.dataForm.id) {
+        this.$http({
+          url: this.$http.adornUrl('/epi/dept/select'),
+          method: 'get',
+          params: this.$http.adornParams()
+        }).then(({data}) => {
+          this.menuList = treeDataTranslate(data.menuList, 'id')
+        }).then(() => {
+          this.visible = true
+          this.$nextTick(() => {
+            this.$refs['dataForm'].resetFields()
+          })
+        }).then(() => {
+          if (!this.dataForm.id) {
+            // 新增
+            this.menuListTreeSetCurrentNode()
+          } else {
+            // 修改
             this.$http({
               url: this.$http.adornUrl(`/epi/userdept/info/${this.dataForm.id}`),
               method: 'get',
               params: this.$http.adornParams()
             }).then(({data}) => {
-              if (data && data.code === 0) {
-                this.dataForm.userId = data.userDept.userId
-                this.dataForm.deptId = data.userDept.deptId
-                this.dataForm.createTime = data.userDept.createTime
-                this.dataForm.updateTime = data.userDept.updateTime
-                this.dataForm.status = data.userDept.status
-              }
+              this.dataForm.userId = data.userDept.userId
+              this.dataForm.deptId = data.userDept.deptId
+              this.dataForm.username = data.userDept.username
+              this.dataForm.name = data.userDept.name
+              this.menuListTreeSetCurrentNode()
             })
           }
         })
+      },
+      // 菜单树选中
+      menuListTreeCurrentChangeHandle (data, node) {
+        this.dataForm.parentId = data.id
+        this.dataForm.parentName = data.name
+        this.dataForm.deptId = data.id
+      },
+      // 菜单树设置当前选中节点
+      menuListTreeSetCurrentNode () {
+        this.$refs.menuListTree.setCurrentKey(this.dataForm.parentId)
+        this.dataForm.parentName = (this.$refs.menuListTree.getCurrentNode() || {})['name']
       },
       // 表单提交
       dataFormSubmit () {
@@ -92,10 +115,7 @@
               data: this.$http.adornData({
                 'id': this.dataForm.id || undefined,
                 'userId': this.dataForm.userId,
-                'deptId': this.dataForm.deptId,
-                'createTime': this.dataForm.createTime,
-                'updateTime': this.dataForm.updateTime,
-                'status': this.dataForm.status
+                'deptId': this.dataForm.deptId
               })
             }).then(({data}) => {
               if (data && data.code === 0) {

@@ -6,8 +6,6 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('epi:userdept:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('epi:userdept:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -23,22 +21,19 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="id"
+        prop="username"
         header-align="center"
         align="center"
-        label="ID">
+        label="用户(姓名)">
+        <template slot-scope="scope">
+          {{scope.row.username}}({{scope.row.name}})
+        </template>
       </el-table-column>
       <el-table-column
-        prop="userId"
+        prop="deptName"
         header-align="center"
         align="center"
-        label="用户	外键，用户表id">
-      </el-table-column>
-      <el-table-column
-        prop="deptId"
-        header-align="center"
-        align="center"
-        label="部门id	外键，部门机构表id">
+        label="部门">
       </el-table-column>
       <el-table-column
         prop="createTime"
@@ -56,7 +51,11 @@
         prop="status"
         header-align="center"
         align="center"
-        label="状态	0：正常，-1：异常">
+        label="状态">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.status === -1" size="small" type="danger">异常</el-tag>
+          <el-tag v-else size="small">正常</el-tag>
+        </template>
       </el-table-column>
       <el-table-column
         fixed="right"
