@@ -17,28 +17,22 @@
       @selection-change="selectionChangeHandle"
       style="width: 100%;">
       <el-table-column
-        type="selection"
-        header-align="center"
-        align="center"
-        width="50">
-      </el-table-column>
-      <el-table-column
-        prop="id"
-        header-align="center"
-        align="center"
-        label="ID">
-      </el-table-column>
-      <el-table-column
         prop="no"
         header-align="center"
         align="center"
         label="学号">
       </el-table-column>
       <el-table-column
-        prop="clsId"
+        prop="name"
         header-align="center"
         align="center"
-        label="班级,外键，班级表id">
+        label="姓名">
+      </el-table-column>
+      <el-table-column
+        prop="clsName"
+        header-align="center"
+        align="center"
+        label="班级">
       </el-table-column>
       <el-table-column
         prop="addTime"
@@ -62,7 +56,13 @@
         prop="status"
         header-align="center"
         align="center"
-        label="状态 0：正常，-1：异常,1:退出，2：休学">
+        label="状态">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.status === -1" size="small" type="danger">异常</el-tag>
+          <el-tag v-else-if="scope.row.status === 0" size="small" type="danger">正常</el-tag>
+          <el-tag v-else-if="scope.row.status === 1" size="small" type="danger">退出</el-tag>
+          <el-tag v-else size="small">休学</el-tag>
+        </template>
       </el-table-column>
       <el-table-column
         fixed="right"

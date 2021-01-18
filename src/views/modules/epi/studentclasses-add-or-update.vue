@@ -7,20 +7,8 @@
     <el-form-item label="学号" prop="no">
       <el-input v-model="dataForm.no" placeholder="学号"></el-input>
     </el-form-item>
-    <el-form-item label="班级,外键，班级表id" prop="clsId">
-      <el-input v-model="dataForm.clsId" placeholder="班级,外键，班级表id"></el-input>
-    </el-form-item>
-    <el-form-item label="加入时间" prop="addTime">
-      <el-input v-model="dataForm.addTime" placeholder="加入时间"></el-input>
-    </el-form-item>
-    <el-form-item label="退出时间" prop="exitTime">
-      <el-input v-model="dataForm.exitTime" placeholder="退出时间"></el-input>
-    </el-form-item>
-    <el-form-item label="更新时间" prop="updateTime">
-      <el-input v-model="dataForm.updateTime" placeholder="更新时间"></el-input>
-    </el-form-item>
-    <el-form-item label="状态 0：正常，-1：异常,1:退出，2：休学" prop="status">
-      <el-input v-model="dataForm.status" placeholder="状态 0：正常，-1：异常,1:退出，2：休学"></el-input>
+    <el-form-item label="班级" prop="clsId">
+      <el-input v-model="dataForm.clsId" placeholder="班级"></el-input>
     </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -38,11 +26,7 @@
         dataForm: {
           id: 0,
           no: '',
-          clsId: '',
-          addTime: '',
-          exitTime: '',
-          updateTime: '',
-          status: ''
+          clsId: ''
         },
         dataRule: {
           no: [
@@ -50,18 +34,6 @@
           ],
           clsId: [
             { required: true, message: '班级,外键，班级表id不能为空', trigger: 'blur' }
-          ],
-          addTime: [
-            { required: true, message: '加入时间不能为空', trigger: 'blur' }
-          ],
-          exitTime: [
-            { required: true, message: '退出时间不能为空', trigger: 'blur' }
-          ],
-          updateTime: [
-            { required: true, message: '更新时间不能为空', trigger: 'blur' }
-          ],
-          status: [
-            { required: true, message: '状态 0：正常，-1：异常,1:退出，2：休学不能为空', trigger: 'blur' }
           ]
         }
       }
@@ -81,10 +53,6 @@
               if (data && data.code === 0) {
                 this.dataForm.no = data.studentClasses.no
                 this.dataForm.clsId = data.studentClasses.clsId
-                this.dataForm.addTime = data.studentClasses.addTime
-                this.dataForm.exitTime = data.studentClasses.exitTime
-                this.dataForm.updateTime = data.studentClasses.updateTime
-                this.dataForm.status = data.studentClasses.status
               }
             })
           }
@@ -100,11 +68,7 @@
               data: this.$http.adornData({
                 'id': this.dataForm.id || undefined,
                 'no': this.dataForm.no,
-                'clsId': this.dataForm.clsId,
-                'addTime': this.dataForm.addTime,
-                'exitTime': this.dataForm.exitTime,
-                'updateTime': this.dataForm.updateTime,
-                'status': this.dataForm.status
+                'clsId': this.dataForm.clsId
               })
             }).then(({data}) => {
               if (data && data.code === 0) {
