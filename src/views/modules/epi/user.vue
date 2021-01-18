@@ -2,12 +2,12 @@
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.key" placeholder="班级名称" clearable></el-input>
+        <el-input v-model="dataForm.key" placeholder="参数名" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('epi:classes:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('epi:classes:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button v-if="isAuth('epi:user:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button v-if="isAuth('epi:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -23,42 +23,77 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="id"
+        prop="username"
         header-align="center"
         align="center"
-        label="ID"
-        width="50">
-      </el-table-column>
-
-      <el-table-column
-        prop="name"
-        header-align="center"
-        align="center"
-        label="名称">
+        label="用户名">
       </el-table-column>
       <el-table-column
-        prop="majorName"
+        prop="password"
         header-align="center"
         align="center"
-        label="所属专业">
+        label="密码">
+      </el-table-column>
+      <el-table-column
+        prop="mobile"
+        header-align="center"
+        align="center"
+        label="手机号">
       </el-table-column>
       <el-table-column
         prop="no"
         header-align="center"
         align="center"
-        label="编号">
+        label="学工号">
       </el-table-column>
       <el-table-column
-        prop="grade"
+        prop="name"
         header-align="center"
         align="center"
-        label="年级">
+        label="真实姓名">
       </el-table-column>
       <el-table-column
-        prop="graduateTime"
+        prop="idCard"
         header-align="center"
         align="center"
-        label="毕业时间">
+        label="身份证号">
+      </el-table-column>
+      <el-table-column
+        prop="type"
+        header-align="center"
+        align="center"
+        label="类型">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.type === 0" size="small" type="success">学生</el-tag>
+          <el-tag v-else-if="scope.row.type === 1" size="small" type="danger">教师</el-tag>
+          <el-tag v-else size="small">其他</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="sex"
+        header-align="center"
+        align="center"
+        label="性别">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.sex === 0" size="small" type="info">女</el-tag>
+          <el-tag v-else size="small">男</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="status"
+        header-align="center"
+        align="center"
+        label="状态">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.status === -1" size="small" type="danger">异常</el-tag>
+          <el-tag v-else size="small">正常</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="remark"
+        header-align="center"
+        align="center"
+        label="备注">
       </el-table-column>
       <el-table-column
         prop="createTime"
@@ -71,22 +106,6 @@
         header-align="center"
         align="center"
         label="更新时间">
-      </el-table-column>
-      <el-table-column
-        prop="desc"
-        header-align="center"
-        align="center"
-        label="描述">
-      </el-table-column>
-      <el-table-column
-        prop="status"
-        header-align="center"
-        align="center"
-        label="状态">
-        <template slot-scope="scope">
-          <el-tag v-if="scope.row.status === -1" size="small" type="danger">异常</el-tag>
-          <el-tag v-else size="small">正常</el-tag>
-        </template>
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -115,7 +134,7 @@
 </template>
 
 <script>
-  import AddOrUpdate from './classes-add-or-update'
+  import AddOrUpdate from './user-add-or-update'
   export default {
     data () {
       return {
@@ -142,12 +161,12 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/epi/classes/list'),
+          url: this.$http.adornUrl('/epi/user/list'),
           method: 'get',
           params: this.$http.adornParams({
             'page': this.pageIndex,
             'limit': this.pageSize,
-            'key': this.dataForm.key
+            'username': this.dataForm.key
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
@@ -193,7 +212,7 @@
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/epi/classes/delete'),
+            url: this.$http.adornUrl('/epi/user/delete'),
             method: 'post',
             data: this.$http.adornData(ids, false)
           }).then(({data}) => {
