@@ -17,22 +17,20 @@
       @selection-change="selectionChangeHandle"
       style="width: 100%;">
       <el-table-column
-        type="selection"
-        header-align="center"
-        align="center"
-        width="50">
-      </el-table-column>
-      <el-table-column
         prop="id"
         header-align="center"
         align="center"
-        label="主键">
+        label="ID">
       </el-table-column>
       <el-table-column
         prop="taskType"
         header-align="center"
         align="center"
-        label="任务类型，预留，0：作业">
+        label="任务类型">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.taskType === 0" size="small" type="danger">作业</el-tag>
+          <el-tag v-else-if="scope.row.taskType === 1" size="small" type="danger">预留</el-tag>
+        </template>
       </el-table-column>
       <el-table-column
         prop="title"
@@ -47,10 +45,10 @@
         label="任务描述">
       </el-table-column>
       <el-table-column
-        prop="userId"
+        prop="name"
         header-align="center"
         align="center"
-        label="创建任务人，外键user表id">
+        label="创建任务人">
       </el-table-column>
       <el-table-column
         prop="startTime"
@@ -68,13 +66,24 @@
         prop="sandType"
         header-align="center"
         align="center"
-        label="类型 0：一般 1：紧急">
+        label="类型">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.sandType === 0" size="small" type="danger">一般</el-tag>
+          <el-tag v-else size="small">紧急</el-tag>
+        </template>
       </el-table-column>
       <el-table-column
         prop="status"
         header-align="center"
         align="center"
-        label="状态 0：未执行 1：执行中 2：完成 3：未完成 -1：异常">
+        label="状态">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.status === 0" size="small" type="danger">未执行</el-tag>
+          <el-tag v-else-if="scope.row.status === 1" size="small" type="danger">执行中</el-tag>
+          <el-tag v-else-if="scope.row.status === 2" size="small" type="danger">完成</el-tag>
+          <el-tag v-else-if="scope.row.status === 3" size="small" type="danger">未完成</el-tag>
+          <el-tag v-else size="small">异常</el-tag>
+        </template>
       </el-table-column>
       <el-table-column
         prop="remark"

@@ -17,34 +17,32 @@
       @selection-change="selectionChangeHandle"
       style="width: 100%;">
       <el-table-column
-        type="selection"
-        header-align="center"
-        align="center"
-        width="50">
-      </el-table-column>
-      <el-table-column
         prop="id"
         header-align="center"
         align="center"
-        label="主键">
+        label="ID">
       </el-table-column>
       <el-table-column
         prop="taskId"
         header-align="center"
         align="center"
-        label="外键epi_task表id">
+        label="taskId">
       </el-table-column>
       <el-table-column
         prop="userId"
         header-align="center"
         align="center"
-        label="外键 user表id">
+        label="UserId">
       </el-table-column>
       <el-table-column
         prop="status"
         header-align="center"
         align="center"
-        label="状态 0：待完成 1：已完成">
+        label="状态">
+          <template slot-scope="scope">
+              <el-tag v-if="scope.row.sandType === 0" size="small" type="danger">待完成</el-tag>
+              <el-tag v-else size="small">已完成</el-tag>
+          </template>
       </el-table-column>
       <el-table-column
         prop="receiveTime"
