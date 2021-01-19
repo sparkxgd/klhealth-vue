@@ -4,33 +4,33 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
-    <el-form-item label="任务类型，预留，0：作业" prop="taskType">
-      <el-input v-model="dataForm.taskType" placeholder="任务类型，预留，0：作业"></el-input>
-    </el-form-item>
-    <el-form-item label="任务标题" prop="title">
-      <el-input v-model="dataForm.title" placeholder="任务标题"></el-input>
-    </el-form-item>
-    <el-form-item label="任务描述" prop="desc">
-      <el-input v-model="dataForm.desc" placeholder="任务描述"></el-input>
-    </el-form-item>
-    <el-form-item label="创建任务人，外键user表id" prop="userId">
-      <el-input v-model="dataForm.userId" placeholder="创建任务人，外键user表id"></el-input>
-    </el-form-item>
-    <el-form-item label="开始时间" prop="startTime">
-      <el-input v-model="dataForm.startTime" placeholder="开始时间"></el-input>
-    </el-form-item>
-    <el-form-item label="结束时间" prop="endTime">
-      <el-input v-model="dataForm.endTime" placeholder="结束时间"></el-input>
-    </el-form-item>
-    <el-form-item label="类型 0：一般 1：紧急" prop="sandType">
-      <el-input v-model="dataForm.sandType" placeholder="类型 0：一般 1：紧急"></el-input>
-    </el-form-item>
-    <el-form-item label="状态 0：未执行 1：执行中 2：完成 3：未完成 -1：异常" prop="status">
-      <el-input v-model="dataForm.status" placeholder="状态 0：未执行 1：执行中 2：完成 3：未完成 -1：异常"></el-input>
-    </el-form-item>
-    <el-form-item label="备注" prop="remark">
-      <el-input v-model="dataForm.remark" placeholder="备注"></el-input>
-    </el-form-item>
+      <el-form-item label="任务类型" prop="taskType">
+        <el-input v-model="dataForm.taskType" placeholder="任务类型，预留，0：作业"></el-input>
+      </el-form-item>
+      <el-form-item label="任务标题" prop="title">
+        <el-input v-model="dataForm.title" placeholder="任务标题"></el-input>
+      </el-form-item>
+      <el-form-item label="任务描述" prop="desc">
+        <el-input v-model="dataForm.desc" placeholder="任务描述"></el-input>
+      </el-form-item>
+      <el-form-item label="创建任务人id" prop="userId">
+        <el-input v-model="dataForm.userId" placeholder="外键user表id"></el-input>
+      </el-form-item>
+      <el-form-item label="开始时间" prop="startTime">
+        <el-input v-model="dataForm.startTime" placeholder="开始时间"></el-input>
+      </el-form-item>
+      <el-form-item label="结束时间" prop="endTime">
+        <el-input v-model="dataForm.endTime" placeholder="结束时间"></el-input>
+      </el-form-item>
+      <el-form-item label="类型" prop="sandType">
+        <el-input v-model="dataForm.sandType" placeholder="类型 0：一般 1：紧急"></el-input>
+      </el-form-item>
+      <el-form-item label="状态" prop="status">
+        <el-input v-model="dataForm.status" placeholder="状态 0：未执行 1：执行中 2：完成 3：未完成 -1：异常"></el-input>
+      </el-form-item>
+      <el-form-item label="备注" prop="remark">
+        <el-input v-model="dataForm.remark" placeholder="备注"></el-input>
+      </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
@@ -58,7 +58,7 @@
         },
         dataRule: {
           taskType: [
-            { required: true, message: '任务类型，预留，0：作业不能为空', trigger: 'blur' }
+            { required: true, message: '任务类型不能为空', trigger: 'blur' }
           ],
           title: [
             { required: true, message: '任务标题不能为空', trigger: 'blur' }
@@ -67,7 +67,7 @@
             { required: true, message: '任务描述不能为空', trigger: 'blur' }
           ],
           userId: [
-            { required: true, message: '创建任务人，外键user表id不能为空', trigger: 'blur' }
+            { required: true, message: '创建任务人不能为空', trigger: 'blur' }
           ],
           startTime: [
             { required: true, message: '开始时间不能为空', trigger: 'blur' }
@@ -76,13 +76,7 @@
             { required: true, message: '结束时间不能为空', trigger: 'blur' }
           ],
           sandType: [
-            { required: true, message: '类型 0：一般 1：紧急不能为空', trigger: 'blur' }
-          ],
-          status: [
-            { required: true, message: '状态 0：未执行 1：执行中 2：完成 3：未完成 -1：异常不能为空', trigger: 'blur' }
-          ],
-          remark: [
-            { required: true, message: '备注不能为空', trigger: 'blur' }
+            { required: true, message: '类型不能为空', trigger: 'blur' }
           ]
         }
       }

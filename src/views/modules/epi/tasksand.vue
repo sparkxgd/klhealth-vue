@@ -17,22 +17,28 @@
       @selection-change="selectionChangeHandle"
       style="width: 100%;">
       <el-table-column
+        type="selection"
+        header-align="center"
+        align="center"
+        width="50">
+      </el-table-column>
+      <el-table-column
         prop="id"
         header-align="center"
         align="center"
         label="ID">
       </el-table-column>
       <el-table-column
-        prop="taskId"
+        prop="title"
         header-align="center"
         align="center"
-        label="taskId">
+        label="任务标题">
       </el-table-column>
       <el-table-column
-        prop="userId"
+        prop="name"
         header-align="center"
         align="center"
-        label="UserId">
+        label="任务执行者">
       </el-table-column>
       <el-table-column
         prop="status"
