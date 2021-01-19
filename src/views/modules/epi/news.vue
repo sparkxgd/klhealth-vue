@@ -23,52 +23,39 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="id"
-        header-align="center"
-        align="center"
-        label="主键">
-      </el-table-column>
-      <el-table-column
         prop="title"
         header-align="center"
         align="center"
         label="标题">
       </el-table-column>
       <el-table-column
-        prop="subhead"
-        header-align="center"
-        align="center"
-        label="副标题">
-      </el-table-column>
-      <el-table-column
-        prop="content"
-        header-align="center"
-        align="center"
-        label="内容">
-      </el-table-column>
-      <el-table-column
         prop="newsType"
         header-align="center"
         align="center"
-        label="新闻类型，外键。类型表">
+        label="新闻类型">
       </el-table-column>
       <el-table-column
         prop="type"
         header-align="center"
         align="center"
-        label="类型 1：原创 2：转载 3：其他">
+        label="类型">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.type === 1" size="small" type="danger">原创</el-tag>
+          <el-tag v-else-if="scope.row.type === 2" size="small" type="danger">转载</el-tag>
+          <el-tag v-else size="small">其他</el-tag>
+        </template>
       </el-table-column>
       <el-table-column
         prop="author"
         header-align="center"
         align="center"
-        label="作者名字，原创就是创建者">
+        label="作者">
       </el-table-column>
       <el-table-column
-        prop="reviewer"
+        prop="reviewerName"
         header-align="center"
         align="center"
-        label="审核人,外键 user表id">
+        label="审核人">
       </el-table-column>
       <el-table-column
         prop="rviewTime"
@@ -86,13 +73,19 @@
         prop="status"
         header-align="center"
         align="center"
-        label="文章状态 0：创建 1审核 2：发布 -1：异常">
+        label="状态">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.status === -1" size="small" type="danger">异常</el-tag>
+          <el-tag v-else-if="scope.row.status === 0" size="small" type="danger">待审核</el-tag>
+          <el-tag v-else-if="scope.row.status === 1" size="small" type="danger">待发布</el-tag>
+          <el-tag v-else size="small">已发布</el-tag>
+        </template>
       </el-table-column>
       <el-table-column
-        prop="creater"
+        prop="createrName"
         header-align="center"
         align="center"
-        label="创建者 外键 user表id">
+        label="创建者">
       </el-table-column>
       <el-table-column
         prop="ceateTime"

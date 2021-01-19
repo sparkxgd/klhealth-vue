@@ -10,42 +10,27 @@
     <el-form-item label="副标题" prop="subhead">
       <el-input v-model="dataForm.subhead" placeholder="副标题"></el-input>
     </el-form-item>
-    <el-form-item label="内容" prop="content">
-      <el-input v-model="dataForm.content" placeholder="内容"></el-input>
+
+    <el-form-item label="新闻类型" prop="newsType">
+      <el-select v-model="dataForm.newsType" placeholder="请选择">
+        <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
+      </el-select>
     </el-form-item>
-    <el-form-item label="新闻类型，外键。类型表" prop="newsType">
-      <el-input v-model="dataForm.newsType" placeholder="新闻类型，外键。类型表"></el-input>
+    <el-form-item label="类型" prop="type">
+      <el-radio-group v-model="dataForm.type">
+        <el-radio  :label="1" border>原创</el-radio>
+        <el-radio  :label="2" border>转载</el-radio>
+        <el-radio  :label="3" border>其他</el-radio>
+      </el-radio-group>
     </el-form-item>
-    <el-form-item label="类型 1：原创 2：转载 3：其他" prop="type">
-      <el-input v-model="dataForm.type" placeholder="类型 1：原创 2：转载 3：其他"></el-input>
-    </el-form-item>
-    <el-form-item label="作者名字，原创就是创建者" prop="author">
+    <el-form-item label="作者" prop="author">
       <el-input v-model="dataForm.author" placeholder="作者名字，原创就是创建者"></el-input>
     </el-form-item>
-    <el-form-item label="审核人,外键 user表id" prop="reviewer">
-      <el-input v-model="dataForm.reviewer" placeholder="审核人,外键 user表id"></el-input>
-    </el-form-item>
-    <el-form-item label="审核时间" prop="rviewTime">
-      <el-input v-model="dataForm.rviewTime" placeholder="审核时间"></el-input>
-    </el-form-item>
-    <el-form-item label="发布时间" prop="releaseTime">
-      <el-input v-model="dataForm.releaseTime" placeholder="发布时间"></el-input>
-    </el-form-item>
-    <el-form-item label="文章状态 0：创建 1审核 2：发布 -1：异常" prop="status">
-      <el-input v-model="dataForm.status" placeholder="文章状态 0：创建 1审核 2：发布 -1：异常"></el-input>
-    </el-form-item>
-    <el-form-item label="创建者 外键 user表id" prop="creater">
-      <el-input v-model="dataForm.creater" placeholder="创建者 外键 user表id"></el-input>
-    </el-form-item>
-    <el-form-item label="创建时间" prop="ceateTime">
-      <el-input v-model="dataForm.ceateTime" placeholder="创建时间"></el-input>
-    </el-form-item>
-    <el-form-item label="浏览量" prop="lookNum">
-      <el-input v-model="dataForm.lookNum" placeholder="浏览量"></el-input>
-    </el-form-item>
-    <el-form-item label="备注" prop="remark">
-      <el-input v-model="dataForm.remark" placeholder="备注"></el-input>
-    </el-form-item>
+      <el-form-item label="内容" prop="content">
+        <div class="mod-demo-ueditor">
+          <script :id="ueId" class="ueditor-box" type="text/plain" style="width: 100%; height: 260px;"></script>
+        </div>
+      </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
@@ -55,17 +40,21 @@
 </template>
 
 <script>
+  import ueditor from 'ueditor'
   export default {
     data () {
       return {
+        ue: null,
+        ueId: `J_ueditorBox_${new Date().getTime()}`,
+        ueContent: '',
         visible: false,
         dataForm: {
           id: 0,
           title: '',
           subhead: '',
           content: '',
-          newsType: '',
-          type: '',
+          newsType: 2,
+          type: 1,
           author: '',
           reviewer: '',
           rviewTime: '',
@@ -86,40 +75,12 @@
           content: [
             { required: true, message: '内容不能为空', trigger: 'blur' }
           ],
-          newsType: [
-            { required: true, message: '新闻类型，外键。类型表不能为空', trigger: 'blur' }
-          ],
-          type: [
-            { required: true, message: '类型 1：原创 2：转载 3：其他不能为空', trigger: 'blur' }
-          ],
           author: [
             { required: true, message: '作者名字，原创就是创建者不能为空', trigger: 'blur' }
-          ],
-          reviewer: [
-            { required: true, message: '审核人,外键 user表id不能为空', trigger: 'blur' }
-          ],
-          rviewTime: [
-            { required: true, message: '审核时间不能为空', trigger: 'blur' }
-          ],
-          releaseTime: [
-            { required: true, message: '发布时间不能为空', trigger: 'blur' }
-          ],
-          status: [
-            { required: true, message: '文章状态 0：创建 1审核 2：发布 -1：异常不能为空', trigger: 'blur' }
-          ],
-          creater: [
-            { required: true, message: '创建者 外键 user表id不能为空', trigger: 'blur' }
-          ],
-          ceateTime: [
-            { required: true, message: '创建时间不能为空', trigger: 'blur' }
-          ],
-          lookNum: [
-            { required: true, message: '浏览量不能为空', trigger: 'blur' }
-          ],
-          remark: [
-            { required: true, message: '备注不能为空', trigger: 'blur' }
           ]
-        }
+        },
+        options: [
+          { name: '疫情新闻', id: 1 }, { name: '学校新闻', id: 2 }]
       }
     },
     methods: {
@@ -127,6 +88,9 @@
         this.dataForm.id = id || 0
         this.visible = true
         this.$nextTick(() => {
+          this.ue = ueditor.getEditor(this.ueId, {
+            // serverUrl: '', // 服务器统一请求接口路径
+          })
           this.$refs['dataForm'].resetFields()
           if (this.dataForm.id) {
             this.$http({
@@ -141,13 +105,6 @@
                 this.dataForm.newsType = data.news.newsType
                 this.dataForm.type = data.news.type
                 this.dataForm.author = data.news.author
-                this.dataForm.reviewer = data.news.reviewer
-                this.dataForm.rviewTime = data.news.rviewTime
-                this.dataForm.releaseTime = data.news.releaseTime
-                this.dataForm.status = data.news.status
-                this.dataForm.creater = data.news.creater
-                this.dataForm.ceateTime = data.news.ceateTime
-                this.dataForm.lookNum = data.news.lookNum
                 this.dataForm.remark = data.news.remark
               }
             })
@@ -169,13 +126,6 @@
                 'newsType': this.dataForm.newsType,
                 'type': this.dataForm.type,
                 'author': this.dataForm.author,
-                'reviewer': this.dataForm.reviewer,
-                'rviewTime': this.dataForm.rviewTime,
-                'releaseTime': this.dataForm.releaseTime,
-                'status': this.dataForm.status,
-                'creater': this.dataForm.creater,
-                'ceateTime': this.dataForm.ceateTime,
-                'lookNum': this.dataForm.lookNum,
                 'remark': this.dataForm.remark
               })
             }).then(({data}) => {

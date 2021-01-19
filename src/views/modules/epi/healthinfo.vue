@@ -57,12 +57,20 @@
         header-align="center"
         align="center"
         label="是否正常 0：正常 1：不正常">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.isnormal === 0" size="small" type="danger">异常</el-tag>
+          <el-tag v-else size="small">正常</el-tag>
+        </template>
       </el-table-column>
       <el-table-column
         prop="isCatDangerous"
         header-align="center"
         align="center"
         label="是否与风险人员接触 0：否 1：是">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.isCatDangerous === 1" size="small" type="danger">是</el-tag>
+          <el-tag v-else size="small">否</el-tag>
+        </template>
       </el-table-column>
       <el-table-column
         prop="zoneAction"
