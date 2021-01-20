@@ -10,100 +10,47 @@
         <el-button v-if="isAuth('epi:healthinfo:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
-    <el-table
-      :data="dataList"
-      border
-      v-loading="dataListLoading"
-      @selection-change="selectionChangeHandle"
-      style="width: 100%;">
-      <el-table-column
-        type="selection"
-        header-align="center"
-        align="center"
-        width="50">
+    <el-table :data="dataList" border v-loading="dataListLoading" @selection-change="selectionChangeHandle" style="width: 100%;">
+      <el-table-column type="selection" header-align="center" align="center" width="50">
       </el-table-column>
-      <el-table-column
-        prop="id"
-        header-align="center"
-        align="center"
-        label="主键">
+      <el-table-column prop="id" header-align="center" align="center" label="主键">
       </el-table-column>
-      <el-table-column
-        prop="userId"
-        header-align="center"
-        align="center"
-        label="用户ID">
+      <el-table-column prop="userId" header-align="center" align="center" label="用户ID">
       </el-table-column>
-      <el-table-column
-        prop="healthImg"
-        header-align="center"
-        align="center"
-        label="健康码">
+      <el-table-column prop="healthImg" header-align="center" align="center" label="健康码">
+        <template slot-scope="scope">
+          <img :src="scope.row.healthImg">
+        </template>
       </el-table-column>
-      <el-table-column
-        prop="position"
-        header-align="center"
-        align="center"
-        label="经纬度">
+      <el-table-column prop="position" header-align="center" align="center" label="经纬度">
       </el-table-column>
-      <el-table-column
-        prop="temperature"
-        header-align="center"
-        align="center"
-        label="体温">
+      <el-table-column prop="temperature" header-align="center" align="center" label="体温">
       </el-table-column>
-      <el-table-column
-        prop="isnormal"
-        header-align="center"
-        align="center"
-        label="是否正常 0：正常 1：不正常">
+      <el-table-column prop="isnormal" header-align="center" align="center" label="是否正常 0：正常 1：不正常">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.isnormal === 0" size="small" type="danger">异常</el-tag>
           <el-tag v-else size="small">正常</el-tag>
         </template>
       </el-table-column>
-      <el-table-column
-        prop="isCatDangerous"
-        header-align="center"
-        align="center"
-        label="是否与风险人员接触 0：否 1：是">
+      <el-table-column prop="isCatDangerous" header-align="center" align="center" label="是否与风险人员接触 0：否 1：是">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.isCatDangerous === 1" size="small" type="danger">是</el-tag>
           <el-tag v-else size="small">否</el-tag>
         </template>
       </el-table-column>
-      <el-table-column
-        prop="zoneAction"
-        header-align="center"
-        align="center"
-        label="活动区域">
+      <el-table-column prop="zoneAction" header-align="center" align="center" label="活动区域">
       </el-table-column>
-      <el-table-column
-        prop="remark"
-        header-align="center"
-        align="center"
-        label="备注">
+      <el-table-column prop="remark" header-align="center" align="center" label="备注">
       </el-table-column>
-      <el-table-column
-        fixed="right"
-        header-align="center"
-        align="center"
-        width="150"
-        label="操作">
+      <el-table-column fixed="right" header-align="center" align="center" width="150" label="操作">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
           <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      @size-change="sizeChangeHandle"
-      @current-change="currentChangeHandle"
-      :current-page="pageIndex"
-      :page-sizes="[10, 20, 50, 100]"
-      :page-size="pageSize"
-      :total="totalPage"
-      layout="total, sizes, prev, pager, next, jumper">
+    <el-pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" :current-page="pageIndex"
+      :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" :total="totalPage" layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
@@ -113,7 +60,7 @@
 <script>
   import AddOrUpdate from './healthinfo-add-or-update'
   export default {
-    data () {
+    data() {
       return {
         dataForm: {
           key: ''
@@ -130,12 +77,12 @@
     components: {
       AddOrUpdate
     },
-    activated () {
+    activated() {
       this.getDataList()
     },
     methods: {
       // 获取数据列表
-      getDataList () {
+      getDataList() {
         this.dataListLoading = true
         this.$http({
           url: this.$http.adornUrl('/epi/healthinfo/list'),
@@ -145,7 +92,9 @@
             'limit': this.pageSize,
             'key': this.dataForm.key
           })
-        }).then(({data}) => {
+        }).then(({
+          data
+        }) => {
           if (data && data.code === 0) {
             this.dataList = data.page.list
             this.totalPage = data.page.totalCount
@@ -157,29 +106,29 @@
         })
       },
       // 每页数
-      sizeChangeHandle (val) {
+      sizeChangeHandle(val) {
         this.pageSize = val
         this.pageIndex = 1
         this.getDataList()
       },
       // 当前页
-      currentChangeHandle (val) {
+      currentChangeHandle(val) {
         this.pageIndex = val
         this.getDataList()
       },
       // 多选
-      selectionChangeHandle (val) {
+      selectionChangeHandle(val) {
         this.dataListSelections = val
       },
       // 新增 / 修改
-      addOrUpdateHandle (id) {
+      addOrUpdateHandle(id) {
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(id)
         })
       },
       // 删除
-      deleteHandle (id) {
+      deleteHandle(id) {
         var ids = id ? [id] : this.dataListSelections.map(item => {
           return item.id
         })
@@ -192,7 +141,9 @@
             url: this.$http.adornUrl('/epi/healthinfo/delete'),
             method: 'post',
             data: this.$http.adornData(ids, false)
-          }).then(({data}) => {
+          }).then(({
+            data
+          }) => {
             if (data && data.code === 0) {
               this.$message({
                 message: '操作成功',
