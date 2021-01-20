@@ -4,7 +4,7 @@
     <el-row :gutter="20">
 
       <el-col :span="6">
-        <div class="grid-content bg-purple clear">
+        <div class="grid-content bg-purple clear" @click="home_card_click(1)">
           <div class="content-child">
             <icon-svg class="child-icon" style="width: 48px; height: 48px;" name="admin"></icon-svg>
           </div>
@@ -17,7 +17,7 @@
       </el-col>
 
       <el-col :span="6">
-        <div class="grid-content bg-purple clear">
+        <div class="grid-content bg-purple clear" @click="home_card_click(2)">
           <div class="content-child">
             <icon-svg class="child-icon" style="width: 48px; height: 48px;" name="admin"></icon-svg>
           </div>
@@ -30,7 +30,7 @@
       </el-col>
 
       <el-col :span="6">
-        <div class="grid-content bg-purple clear">
+        <div class="grid-content bg-purple clear" @click="home_card_click(3)">
           <div class="content-child">
             <icon-svg class="child-icon" style="width: 48px; height: 48px;" name="admin"></icon-svg>
           </div>
@@ -43,7 +43,7 @@
       </el-col>
 
       <el-col :span="6">
-        <div class="grid-content bg-purple clear">
+        <div class="grid-content bg-purple clear" @click="home_card_click(4)">
           <div class="content-child">
             <icon-svg class="child-icon" style="width: 48px; height: 48px;" name="admin"></icon-svg>
           </div>
@@ -56,28 +56,52 @@
       </el-col>
     </el-row>
 
-    <el-row>
-      <el-col :span="24">
+    <el-row :gutter="24" class="clear">
+
+      <el-col :span="15" style="float: left;" class="row_chart">
         <el-card>
+          <div class="row-title">新闻动态</div>
+          <el-table :data="newdatas" @row-click="newsClick" border style="width: 100%">
+            <el-table-column :show-overflow-tooltip="true" prop="title" label="标题" width="180"></el-table-column>
+            <el-table-column prop="newsType" label="新闻类型" width="180">
+              <template slot-scope="scope">
+                <el-tag v-if="scope.row.newsType === 1" size="small" type="danger">学院新闻</el-tag>
+                <el-tag v-else size="small">疫情新闻</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column prop="releaseTime" label="发布时间" width="180"></el-table-column>
+            <el-table-column :show-overflow-tooltip="true" prop="author" label="作者"></el-table-column>
+            <el-table-column prop="lookNum" label="浏览量"></el-table-column>
+          </el-table>
+        </el-card>
+      </el-col>
+
+      <el-col :span="9" style="float: right;" class="row_chart">
+        <el-card>
+          <div class="row-title">公告通知</div>
+          <el-table :data="TableData" border style="width: 100%">
+            <el-table-column prop="date" label="日期" width="120">
+            </el-table-column>
+            <el-table-column :show-overflow-tooltip="true" prop="name" label="标题" width="120">
+            </el-table-column>
+            <el-table-column :show-overflow-tooltip="true" prop="address" label="内容">
+            </el-table-column>
+          </el-table>
+        </el-card>
+      </el-col>
+
+      <el-col :span="24" class="row_chart">
+        <el-card>
+          <div class="row-title">学院签到统计</div>
           <div id="J_chartLineBox" class="chart-box"></div>
         </el-card>
       </el-col>
-      <el-col :span="24">
+
+      <el-col :span="24" class="row_chart">
         <el-card>
           <div id="J_chartBarBox" class="chart-box"></div>
         </el-card>
       </el-col>
-    </el-row>
-
-    <el-row>
-      <el-table style="width: 100%">
-        <el-table-column prop="date" label="日期" width="180">
-        </el-table-column>
-        <el-table-column prop="name" label="姓名" width="180">
-        </el-table-column>
-        <el-table-column prop="address" label="地址">
-        </el-table-column>
-      </el-table>
     </el-row>
   </div>
 </template>
@@ -90,13 +114,15 @@
       return {
         chartLine: null,
         chartBar: null,
-        tableData:nul
+        TableData: null,
+        newdatas: []
       }
     },
     mounted() {
       this.initChartLine()
       this.initChartBar()
-      this.tableData=this.inittableData()
+      this.TableData = this.initTableData().tableData
+      this.initNewsData()
     },
     activated() {
       // 由于给echart添加了resize事件, 在组件激活时需要重新resize绘画一次, 否则出现空白bug
@@ -112,24 +138,19 @@
       initChartLine() {
         var option = {
           'title': {
-            'text': '折线图堆叠'
+            'text': ''
           },
           'tooltip': {
             'trigger': 'axis'
           },
           'legend': {
-            'data': ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']
+            'data': ['人文学院', '外国语学院', '教育科学院', '旅游学院', '经济与管理学院','马克思主义学院','理学院','大数据工程学院','大健康学院','建筑工程学院','音乐与舞蹈学院','美术与设计学院','体育学院','国际教育学院','继续教育学院']
           },
           'grid': {
             'left': '3%',
             'right': '4%',
             'bottom': '3%',
             'containLabel': true
-          },
-          'toolbox': {
-            'feature': {
-              'saveAsImage': {}
-            }
           },
           'xAxis': {
             'type': 'category',
@@ -140,31 +161,91 @@
             'type': 'value'
           },
           'series': [{
-              'name': '邮件营销',
+              'name': '人文学院',
               'type': 'line',
               'stack': '总量',
               'data': [120, 132, 101, 134, 90, 230, 210]
             },
             {
-              'name': '联盟广告',
+              'name': '外国语学院',
               'type': 'line',
               'stack': '总量',
               'data': [220, 182, 191, 234, 290, 330, 310]
             },
             {
-              'name': '视频广告',
+              'name': '教育科学院',
               'type': 'line',
               'stack': '总量',
               'data': [150, 232, 201, 154, 190, 330, 410]
             },
             {
-              'name': '直接访问',
+              'name': '国际教育学院',
               'type': 'line',
               'stack': '总量',
               'data': [320, 332, 301, 334, 390, 330, 320]
             },
             {
-              'name': '搜索引擎',
+              'name': '旅游学院',
+              'type': 'line',
+              'stack': '总量',
+              'data': [820, 932, 901, 934, 1290, 1330, 1320]
+            },
+            {
+              'name': '经济与管理学院',
+              'type': 'line',
+              'stack': '总量',
+              'data': [820, 932, 901, 934, 1290, 1330, 1320]
+            },
+            {
+              'name': '马克思主义学院',
+              'type': 'line',
+              'stack': '总量',
+              'data': [820, 932, 901, 934, 1290, 1330, 1320]
+            },
+            {
+              'name': '理学院',
+              'type': 'line',
+              'stack': '总量',
+              'data': [820, 932, 901, 934, 1290, 1330, 1320]
+            },
+            {
+              'name': '大数据工程学院',
+              'type': 'line',
+              'stack': '总量',
+              'data': [820, 932, 901, 934, 1290, 1330, 1320]
+            },
+            {
+              'name': '大健康学院',
+              'type': 'line',
+              'stack': '总量',
+              'data': [820, 932, 901, 934, 1290, 1330, 1320]
+            },
+            {
+              'name': '建筑工程学院',
+              'type': 'line',
+              'stack': '总量',
+              'data': [820, 932, 901, 934, 1290, 1330, 1320]
+            },
+            {
+              'name': '音乐与舞蹈学院',
+              'type': 'line',
+              'stack': '总量',
+              'data': [820, 932, 901, 934, 1290, 1330, 1320]
+            },
+            {
+              'name': '美术与设计学院',
+              'type': 'line',
+              'stack': '总量',
+              'data': [820, 932, 901, 934, 1290, 1330, 1320]
+            },
+            {
+              'name': '体育学院',
+              'type': 'line',
+              'stack': '总量',
+              'data': [820, 932, 901, 934, 1290, 1330, 1320]
+            },
+            {
+              'name': '继续教育学院',
               'type': 'line',
               'stack': '总量',
               'data': [820, 932, 901, 934, 1290, 1330, 1320]
@@ -278,7 +359,28 @@
         })
       },
       /* 表格渲染*/
-      inittableData() {
+      /* 新闻数据获取*/
+      initNewsData() {
+        this.$http({
+          url: this.$http.adornUrl('/epi/news/list'),
+          method: 'get',
+          params: this.$http.adornParams({
+            'page': 1,
+            'limit': 4,
+            'key': ''
+          })
+        }).then(({
+          data
+        }) => {
+          if (data && data.code === 0) {
+            this.newdatas = data.page.list
+          } else {
+            this.newdatas = []
+          }
+        })
+      },
+      /* 通知数据获取*/
+      initTableData() {
         return {
           tableData: [{
             date: '2016-05-02',
@@ -298,6 +400,25 @@
             address: '上海市普陀区金沙江路 1516 弄'
           }]
         }
+      },
+      home_card_click(item) {
+        switch (item) {
+          case 1:
+            console.log('未签到')
+            break;
+          case 2:
+            console.log('异常人数')
+            break;
+          case 3:
+            console.log('外出务工')
+            break;
+          case 4:
+            console.log('外地人数')
+            break;
+        }
+      },
+      newsClick(row) {
+        alert(row.title)
       }
     }
   }
@@ -378,9 +499,10 @@
     color: #000;
   }
 
-  .grid-echarts {
-    background-color: #00B7EE;
-    padding: 15px;
+  .row-title {
+    color: #000000;
+    font-size: 20px;
+    margin: 0 0 20px 0;
   }
 
   .el-alert {
@@ -395,6 +517,10 @@
       padding-top: 10px;
       padding-bottom: 10px;
     }
+  }
+
+  .row_chart {
+    margin-bottom: 20px;
   }
 
   .chart-box {
