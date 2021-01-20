@@ -14,7 +14,7 @@
         <el-input v-model="dataForm.desc" placeholder="任务描述"></el-input>
       </el-form-item>
       <el-form-item label="创建任务人" prop="userId">
-        <el-input v-model="dataForm.userId" placeholder="外键user表no"></el-input>
+        <el-input v-model="dataForm.userId" placeholder="外键user表id"></el-input>
       </el-form-item>
       <el-form-item label="开始时间" prop="startTime">
         <el-input v-model="dataForm.startTime" placeholder="开始时间"></el-input>

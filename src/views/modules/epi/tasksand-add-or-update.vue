@@ -8,7 +8,7 @@
       <el-input v-model="dataForm.taskId" placeholder="epi_task表id"></el-input>
     </el-form-item>
     <el-form-item label="学号" prop="userId">
-      <el-input v-model="dataForm.userId" placeholder="user表学号"></el-input>
+      <el-input v-model="dataForm.userId" placeholder="user表id"></el-input>
     </el-form-item>
     <el-form-item label="备注" prop="remark">
       <el-input v-model="dataForm.remark" placeholder="备注"></el-input>
