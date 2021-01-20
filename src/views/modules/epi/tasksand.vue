@@ -26,25 +26,29 @@
         prop="id"
         header-align="center"
         align="center"
-        label="主键">
+        label="ID">
       </el-table-column>
       <el-table-column
-        prop="taskId"
+        prop="title"
         header-align="center"
         align="center"
-        label="外键epi_task表id">
+        label="任务标题">
       </el-table-column>
       <el-table-column
-        prop="userId"
+        prop="name"
         header-align="center"
         align="center"
-        label="外键 user表id">
+        label="任务执行者">
       </el-table-column>
       <el-table-column
         prop="status"
         header-align="center"
         align="center"
-        label="状态 0：待完成 1：已完成">
+        label="状态">
+          <template slot-scope="scope">
+              <el-tag v-if="scope.row.status === 0" size="small" type="danger">待完成</el-tag>
+              <el-tag v-else size="small">已完成</el-tag>
+          </template>
       </el-table-column>
       <el-table-column
         prop="receiveTime"
