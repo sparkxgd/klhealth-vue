@@ -34,7 +34,7 @@
         prop="name"
         header-align="center"
         align="center"
-        label="名称">
+        label="班级名称">
       </el-table-column>
       <el-table-column
         prop="majorName"
@@ -46,7 +46,7 @@
         prop="no"
         header-align="center"
         align="center"
-        label="编号">
+        label="班级编号">
       </el-table-column>
       <el-table-column
         prop="grade"
@@ -59,12 +59,6 @@
         header-align="center"
         align="center"
         label="毕业时间">
-      </el-table-column>
-      <el-table-column
-        prop="createTime"
-        header-align="center"
-        align="center"
-        label="创建时间">
       </el-table-column>
       <el-table-column
         prop="updateTime"
@@ -92,11 +86,12 @@
         fixed="right"
         header-align="center"
         align="center"
-        width="150"
+        width="250"
         label="操作">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
-          <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
+          <el-button type="primary" size="mini" @click="addStudentHandle(scope.row.id)">添加学生</el-button>
+          <el-button type="success" size="mini" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
+          <el-button type="danger" size="mini" @click="deleteHandle(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -111,11 +106,13 @@
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
+    <add-student v-if="addStudentVisible" ref="addStudent" @refreshDataList="getDataList"></add-student>
   </div>
 </template>
 
 <script>
   import AddOrUpdate from './classes-add-or-update'
+  import AddStudent from './classes-add-student'
   export default {
     data () {
       return {
@@ -128,11 +125,13 @@
         totalPage: 0,
         dataListLoading: false,
         dataListSelections: [],
-        addOrUpdateVisible: false
+        addOrUpdateVisible: false,
+        addStudentVisible: false
       }
     },
     components: {
-      AddOrUpdate
+      AddOrUpdate,
+      AddStudent
     },
     activated () {
       this.getDataList()
@@ -180,6 +179,13 @@
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(id)
+        })
+      },
+      // 添加学生
+      addStudentHandle (id) {
+        this.addStudentVisible = true
+        this.$nextTick(() => {
+          this.$refs.addStudent.init(id)
         })
       },
       // 删除
