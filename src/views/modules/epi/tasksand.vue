@@ -46,7 +46,7 @@
         align="center"
         label="状态">
           <template slot-scope="scope">
-              <el-tag v-if="scope.row.sandType === 0" size="small" type="danger">待完成</el-tag>
+              <el-tag v-if="scope.row.status === 0" size="small" type="danger">待完成</el-tag>
               <el-tag v-else size="small">已完成</el-tag>
           </template>
       </el-table-column>

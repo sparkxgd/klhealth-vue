@@ -10,6 +10,9 @@
     <el-form-item label="学号" prop="userId">
       <el-input v-model="dataForm.userId" placeholder="user表学号"></el-input>
     </el-form-item>
+    <el-form-item label="备注" prop="remark">
+      <el-input v-model="dataForm.remark" placeholder="备注"></el-input>
+    </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
@@ -26,7 +29,8 @@
         dataForm: {
           id: 0,
           taskId: '',
-          userId: ''
+          userId: '',
+          remark: ''
         },
         dataRule: {
           taskId: [
@@ -53,6 +57,7 @@
               if (data && data.code === 0) {
                 this.dataForm.taskId = data.taskSand.taskId
                 this.dataForm.userId = data.taskSand.userId
+                this.dataForm.remark = data.taskSand.remark
               }
             })
           }
@@ -68,7 +73,8 @@
               data: this.$http.adornData({
                 'id': this.dataForm.id || undefined,
                 'taskId': this.dataForm.taskId,
-                'userId': this.dataForm.userId
+                'userId': this.dataForm.userId,
+                'remark': this.dataForm.remark
               })
             }).then(({data}) => {
               if (data && data.code === 0) {

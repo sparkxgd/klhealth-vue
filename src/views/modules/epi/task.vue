@@ -74,8 +74,8 @@
         align="center"
         label="类型">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.sandType === 0" size="small" type="danger">一般</el-tag>
-          <el-tag v-else size="small">紧急</el-tag>
+          <el-tag v-if="scope.row.sandType === 1" size="small" type="danger">紧急</el-tag>
+          <el-tag v-else size="small">一般</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -86,9 +86,9 @@
         <template slot-scope="scope">
           <el-tag v-if="scope.row.status === 0" size="small" type="danger">未执行</el-tag>
           <el-tag v-else-if="scope.row.status === 1" size="small" type="danger">执行中</el-tag>
-          <el-tag v-else-if="scope.row.status === 2" size="small" type="danger">完成</el-tag>
+          <el-tag v-else-if="scope.row.status === 2" size="small">完成</el-tag>
           <el-tag v-else-if="scope.row.status === 3" size="small" type="danger">未完成</el-tag>
-          <el-tag v-else size="small">异常</el-tag>
+          <el-tag v-else size="small" type="danger">异常</el-tag>
         </template>
       </el-table-column>
       <el-table-column
