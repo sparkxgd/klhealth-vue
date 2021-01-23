@@ -144,7 +144,9 @@
             'trigger': 'axis'
           },
           'legend': {
-            'data': ['人文学院', '外国语学院', '教育科学院', '旅游学院', '经济与管理学院','马克思主义学院','理学院','大数据工程学院','大健康学院','建筑工程学院','音乐与舞蹈学院','美术与设计学院','体育学院','国际教育学院','继续教育学院']
+            'data': ['人文学院', '外国语学院', '教育科学院', '旅游学院', '经济与管理学院', '马克思主义学院', '理学院', '大数据工程学院', '大健康学院', '建筑工程学院',
+              '音乐与舞蹈学院', '美术与设计学院', '体育学院', '国际教育学院', '继续教育学院'
+            ]
           },
           'grid': {
             'left': '3%',
@@ -404,13 +406,22 @@
       home_card_click(item) {
         switch (item) {
           case 1:
-            console.log('未签到')
+            //跳转到未签到人信息列表
+            this.$router.push({
+              path: "/epi-dont-sign"
+            });
             break;
           case 2:
-            console.log('异常人数')
+          //跳转到异常人员信息列表
+            this.$router.push({
+              path: "/epi-abnormal-peo"
+            });
             break;
           case 3:
-            console.log('外出务工')
+          //跳转到外出务工人员信息列表
+            this.$router.push({
+              path: "/epi-goout-peo"
+            });
             break;
           case 4:
             console.log('外地人数')
