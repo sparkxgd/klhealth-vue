@@ -73,9 +73,6 @@
           ],
           zoneAction: [
             { required: true, message: '活动区域不能为空', trigger: 'blur' }
-          ],
-          remark: [
-            { required: true, message: '备注不能为空', trigger: 'blur' }
           ]
         }
       }

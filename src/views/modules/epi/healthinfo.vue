@@ -13,10 +13,6 @@
     <el-table :data="dataList" border v-loading="dataListLoading" @selection-change="selectionChangeHandle" style="width: 100%;">
       <el-table-column type="selection" header-align="center" align="center" width="50">
       </el-table-column>
-      <el-table-column prop="id" header-align="center" align="center" label="主键">
-      </el-table-column>
-      <el-table-column prop="userId" header-align="center" align="center" label="用户ID">
-      </el-table-column>
       <el-table-column prop="healthImg" header-align="center" align="center" label="健康码">
         <template slot-scope="scope">
           <img :src="scope.row.healthImg">
@@ -26,13 +22,13 @@
       </el-table-column>
       <el-table-column prop="temperature" header-align="center" align="center" label="体温">
       </el-table-column>
-      <el-table-column prop="isnormal" header-align="center" align="center" label="是否正常 0：正常 1：不正常">
+      <el-table-column prop="isnormal" header-align="center" align="center" label="是否正常">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.isnormal === 0" size="small" type="danger">异常</el-tag>
           <el-tag v-else size="small">正常</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="isCatDangerous" header-align="center" align="center" label="是否与风险人员接触 0：否 1：是">
+      <el-table-column prop="isCatDangerous" header-align="center" align="center" label="是否与风险人员接触">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.isCatDangerous === 1" size="small" type="danger">是</el-tag>
           <el-tag v-else size="small">否</el-tag>
