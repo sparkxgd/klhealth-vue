@@ -11,7 +11,7 @@
 
           <div class="content-info">
             <div class="info-text">系统总人数</div>
-            <div class="info-num">18560</div>
+            <div id="systemNum" class="info-num">18560</div>
           </div>
         </div>
       </el-col>
@@ -24,7 +24,7 @@
 
           <div class="content-info">
             <div class="info-text">今日未签到</div>
-            <div class="info-num">18560</div>
+            <div id="dayNoSignIn" class="info-num">18560</div>
           </div>
         </div>
       </el-col>
@@ -37,7 +37,7 @@
 
           <div class="content-info">
             <div class="info-text">今日已签到</div>
-            <div class="info-num">18560</div>
+            <div id="daySignIn" class="info-num">18560</div>
           </div>
         </div>
       </el-col>
@@ -50,7 +50,60 @@
 
           <div class="content-info">
             <div class="info-text">今日任务</div>
-            <div class="info-num">18560</div>
+            <div id="dayTask" class="info-num">18560</div>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
+    <el-row :gutter="20">
+      <el-col :span="6">
+        <div class="grid-content bg-purple clear" @click="home_card_click(4)">
+          <div class="content-child">
+            <icon-svg class="child-icon" style="width: 48px; height: 48px;" name="nor"></icon-svg>
+          </div>
+
+          <div class="content-info">
+            <div class="info-text">今日正常人数</div>
+            <div id="dayPeoNormalNum" class="info-num">18560</div>
+          </div>
+        </div>
+      </el-col>
+
+      <el-col :span="6">
+        <div class="grid-content bg-purple clear" @click="home_card_click(4)">
+          <div class="content-child">
+            <icon-svg class="child-icon" style="width: 48px; height: 48px;" name="abn"></icon-svg>
+          </div>
+
+          <div class="content-info">
+            <div class="info-text">今日异常人数</div>
+            <div id="dayPeoAbnormalNum" class="info-num">18560</div>
+          </div>
+        </div>
+      </el-col>
+
+      <el-col :span="6">
+        <div class="grid-content bg-purple clear" @click="home_card_click(4)">
+          <div class="content-child">
+            <icon-svg class="child-icon" style="width: 48px; height: 48px;" name="com"></icon-svg>
+          </div>
+
+          <div class="content-info">
+            <div class="info-text">今日任务已完成</div>
+            <div id="dayTaskComplete" class="info-num">18560</div>
+          </div>
+        </div>
+      </el-col>
+
+      <el-col :span="6">
+        <div class="grid-content bg-purple clear" @click="home_card_click(4)">
+          <div class="content-child">
+            <icon-svg class="child-icon" style="width: 48px; height: 48px;" name="unfinished"></icon-svg>
+          </div>
+
+          <div class="content-info">
+            <div class="info-text">今日任务未完成</div>
+            <div id="dayTaskUnfinished" class="info-num">18560</div>
           </div>
         </div>
       </el-col>
@@ -59,24 +112,56 @@
     <el-row>
       <div id="box" :style="{height:'500px',width:'100%'}"></div>
     </el-row>
+
+    <el-row>
+      <el-col :span="24">
+        <el-card>
+          <div id="J_chartLineBox" class="chart-box"></div>
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 <script>
   export default {
     data() {
       return {
-
+        chartLine: null,
+        epiMapData:null,
       }
     },
     mounted() {
-      this.EpiMapData()
+      this.getDataInfo()
+      this.initChartLine()
     },
     activated() {
-
+      if (this.chartLine) {
+        this.chartLine.resize()
+      }
     },
     methods: {
+      /* 获取数据*/
+      getDataInfo(){
+        this.dataListLoading = true;
+        this.$http({
+          url: this.$http.adornUrl('/epi/home/data'),
+          method: 'get'
+        }).then(datas=>{
+          document.querySelector("#systemNum").innerText=datas.data.data.sysUserNum;
+          document.querySelector("#dayNoSignIn").innerText=datas.data.data.dayNoSignIn;
+          document.querySelector("#daySignIn").innerText=datas.data.data.daySignIn;
+          document.querySelector("#dayTask").innerText=datas.data.data.dayTask;
+          document.querySelector("#dayPeoNormalNum").innerText=datas.data.data.peoNormalNum;
+          document.querySelector("#dayPeoAbnormalNum").innerText=datas.data.data.peoAbnormalNum;
+          document.querySelector("#dayTaskComplete").innerText=datas.data.data.taskComplete;
+          document.querySelector("#dayTaskUnfinished").innerText=datas.data.data.taskUnFinishde;
+          this.epiMapData=datas.data.data.areas;
+          this.EpiMapData(this.epiMapData)
+          this.dataListLoading = false;
+        })
+      },
       /* 地图数据*/
-      EpiMapData() {
+      EpiMapData(data) {
         function randomData() {
           return Math.round(Math.random() * 500);
         }
@@ -205,7 +290,7 @@
         var option = {
           backgroundColor: '#FFFFFF',
           title: {
-            text: '疫情地图',
+            text: '用户活动区域',
             subtext: '纯属虚构',
             x: 'center'
           },
@@ -253,13 +338,79 @@
                 show: false
               }
             },
-            data: mydata
+            data: data
           }]
         };
         // 初始化echarts实例
         var myEcharts = echarts.init(document.getElementById("box"))
         // 使用刚指定的配置项和数据显示图表。
         myEcharts.setOption(option);
+      },
+      initChartLine() {
+        function randomData() {
+          return Math.round(Math.random() * 500);
+        }
+        var option = {
+          'title': {
+            'text': '学院签到数据分析'
+          },
+          'tooltip': {
+            'trigger': 'axis'
+          },
+          'legend': {
+            'data': ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']
+          },
+          'grid': {
+            'left': '3%',
+            'right': '4%',
+            'bottom': '3%',
+            'containLabel': true
+          },
+          'xAxis': {
+            'type': 'category',
+            'boundaryGap': false,
+            'data': ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+          },
+          'yAxis': {
+            'type': 'value'
+          },
+          'series': [{
+              'name': '邮件营销',
+              'type': 'line',
+              'stack': '总量',
+              'data': [120, 132, 101, 134, 90, 230, 210]
+            },
+            {
+              'name': '联盟广告',
+              'type': 'line',
+              'stack': '总量',
+              'data': [220, 182, 191, 234, 290, 330, 310]
+            },
+            {
+              'name': '视频广告',
+              'type': 'line',
+              'stack': '总量',
+              'data': [150, 232, 201, 154, 190, 330, 410]
+            },
+            {
+              'name': '直接访问',
+              'type': 'line',
+              'stack': '总量',
+              'data': [320, 332, 301, 334, 390, 330, 320]
+            },
+            {
+              'name': '搜索引擎',
+              'type': 'line',
+              'stack': '总量',
+              'data': [820, 932, 901, 934, 1290, 1330, 1320]
+            }
+          ]
+        }
+        this.chartLine = echarts.init(document.getElementById('J_chartLineBox'))
+        this.chartLine.setOption(option)
+        window.addEventListener('resize', () => {
+          this.chartLine.resize()
+        })
       }
     }
   }
@@ -302,8 +453,8 @@
     border-radius: 4px;
     text-align: center;
     float: left;
-    height: 108px;
-    width: 108px;
+    height: 105px;
+    width: 105px;
   }
 
   .content-info {
@@ -334,5 +485,9 @@
   .info-num {
     font-size: 20px;
     color: #000;
+  }
+
+  .chart-box {
+    min-height: 400px;
   }
 </style>
