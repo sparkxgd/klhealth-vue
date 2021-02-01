@@ -10,53 +10,60 @@
         <el-button v-if="isAuth('epi:classmanage:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
+
     <el-table
       :data="dataList"
       border
       v-loading="dataListLoading"
       @selection-change="selectionChangeHandle"
       style="width: 100%;">
+
       <el-table-column
         type="selection"
         header-align="center"
         align="center"
         width="50">
       </el-table-column>
-      <el-table-column
-        prop="id"
-        header-align="center"
-        align="center"
-        label="">
-      </el-table-column>
+
       <el-table-column
         prop="claId"
         header-align="center"
         align="center"
-        label="被管理班级	外键，班级表id">
+        label="班级"
+        width="180">
       </el-table-column>
+
       <el-table-column
         prop="userId"
         header-align="center"
         align="center"
-        label="管理人（班主任，辅导员）	外键，user表id">
+        label="班主任"
+        width="180">
       </el-table-column>
+
       <el-table-column
         prop="createTime"
         header-align="center"
         align="center"
-        label="创建时间">
+        label="创建时间"
+        width="180">
       </el-table-column>
+
       <el-table-column
         prop="status"
         header-align="center"
         align="center"
-        label="状态	0：正常，-1：异常">
+        label="状态"
+        width="180">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.status == 0">正常</el-tag>
+          <el-tag v-else>异常</el-tag>
+        </template>
       </el-table-column>
+
       <el-table-column
-        fixed="right"
         header-align="center"
         align="center"
-        width="150"
         label="操作">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>

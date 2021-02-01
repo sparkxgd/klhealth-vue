@@ -23,61 +23,71 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="id"
-        header-align="center"
-        align="center"
-        label="主键">
-      </el-table-column>
-      <el-table-column
         prop="title"
         header-align="center"
         align="center"
-        label="标题">
+        label="标题"
+        width="180">
       </el-table-column>
       <el-table-column
         prop="content"
         header-align="center"
         align="center"
-        label="内容">
+        label="内容"
+        width="180">
       </el-table-column>
       <el-table-column
         prop="userId"
         header-align="center"
         align="center"
-        label="发消息人ID">
+        label="发消息人"
+        width="100">
       </el-table-column>
       <el-table-column
         prop="sandTime"
         header-align="center"
         align="center"
-        label="发送时间">
+        label="发送时间"
+        width="180">
       </el-table-column>
+      <!-- 消息类型 0：一般 1：紧急-->
       <el-table-column
         prop="sandType"
         header-align="center"
         align="center"
-        label="消息类型 0：一般 1：紧急">
+        label="消息类型"
+        width="100">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.sandType==0">一般</el-tag>
+          <el-tag v-else>紧急</el-tag>
+        </template>
       </el-table-column>
+      <!--信息状态 0：待发送 1：已发送 -1：异常 -->
       <el-table-column
         prop="status"
         header-align="center"
         align="center"
-        label="信息状态 0：待发送 1：已发送 -1：异常">
+        label="信息状态"
+        width="100">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.status==0">待发送</el-tag>
+          <el-tag v-else-if="scope.row.status==1">已发送</el-tag>
+          <el-tag v-else>异常</el-tag>
+        </template>
       </el-table-column>
       <el-table-column
         prop="remark"
         header-align="center"
         align="center"
-        label="备注">
+        label="备注"
+        width="100">
       </el-table-column>
       <el-table-column
-        fixed="right"
         header-align="center"
         align="center"
-        width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
+          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row)">修改</el-button>
           <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>

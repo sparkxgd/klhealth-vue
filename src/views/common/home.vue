@@ -1,8 +1,6 @@
 <template>
-  <!-- row 行 col 列  el-->
   <div class="mod-home">
     <el-row :gutter="20">
-
       <el-col :span="6">
         <div class="grid-content bg-purple clear" @click="home_card_click(1)">
           <div class="content-child">
@@ -11,7 +9,7 @@
 
           <div class="content-info">
             <div class="info-text">系统总人数</div>
-            <div id="systemNum" class="info-num">18560</div>
+            <div id="systemNum" class="info-num">0</div>
           </div>
         </div>
       </el-col>
@@ -24,7 +22,7 @@
 
           <div class="content-info">
             <div class="info-text">今日未签到</div>
-            <div id="dayNoSignIn" class="info-num">18560</div>
+            <div id="dayNoSignIn" class="info-num">0</div>
           </div>
         </div>
       </el-col>
@@ -37,7 +35,7 @@
 
           <div class="content-info">
             <div class="info-text">今日已签到</div>
-            <div id="daySignIn" class="info-num">18560</div>
+            <div id="daySignIn" class="info-num">0</div>
           </div>
         </div>
       </el-col>
@@ -50,7 +48,7 @@
 
           <div class="content-info">
             <div class="info-text">今日任务</div>
-            <div id="dayTask" class="info-num">18560</div>
+            <div id="dayTask" class="info-num">0</div>
           </div>
         </div>
       </el-col>
@@ -64,7 +62,7 @@
 
           <div class="content-info">
             <div class="info-text">今日正常人数</div>
-            <div id="dayPeoNormalNum" class="info-num">18560</div>
+            <div id="dayPeoNormalNum" class="info-num">0</div>
           </div>
         </div>
       </el-col>
@@ -77,7 +75,7 @@
 
           <div class="content-info">
             <div class="info-text">今日异常人数</div>
-            <div id="dayPeoAbnormalNum" class="info-num">18560</div>
+            <div id="dayPeoAbnormalNum" class="info-num">0</div>
           </div>
         </div>
       </el-col>
@@ -90,7 +88,7 @@
 
           <div class="content-info">
             <div class="info-text">今日任务已完成</div>
-            <div id="dayTaskComplete" class="info-num">18560</div>
+            <div id="dayTaskComplete" class="info-num">0</div>
           </div>
         </div>
       </el-col>
@@ -103,7 +101,7 @@
 
           <div class="content-info">
             <div class="info-text">今日任务未完成</div>
-            <div id="dayTaskUnfinished" class="info-num">18560</div>
+            <div id="dayTaskUnfinished" class="info-num">0</div>
           </div>
         </div>
       </el-col>
@@ -165,128 +163,6 @@
         function randomData() {
           return Math.round(Math.random() * 500);
         }
-
-        var mydata = [{
-            name: '北京',
-            value: randomData()
-          }, {
-            name: '天津',
-            value: randomData()
-          },
-          {
-            name: '上海',
-            value: randomData()
-          }, {
-            name: '重庆',
-            value: randomData()
-          },
-          {
-            name: '河北',
-            value: randomData()
-          }, {
-            name: '河南',
-            value: randomData()
-          },
-          {
-            name: '云南',
-            value: randomData()
-          }, {
-            name: '辽宁',
-            value: randomData()
-          },
-          {
-            name: '黑龙江',
-            value: randomData()
-          }, {
-            name: '湖南',
-            value: randomData()
-          },
-          {
-            name: '安徽',
-            value: randomData()
-          }, {
-            name: '山东',
-            value: randomData()
-          },
-          {
-            name: '新疆',
-            value: randomData()
-          }, {
-            name: '江苏',
-            value: randomData()
-          },
-          {
-            name: '浙江',
-            value: randomData()
-          }, {
-            name: '江西',
-            value: randomData()
-          },
-          {
-            name: '湖北',
-            value: randomData()
-          }, {
-            name: '广西',
-            value: randomData()
-          },
-          {
-            name: '甘肃',
-            value: randomData()
-          }, {
-            name: '山西',
-            value: randomData()
-          },
-          {
-            name: '内蒙古',
-            value: randomData()
-          }, {
-            name: '陕西',
-            value: randomData()
-          },
-          {
-            name: '吉林',
-            value: randomData()
-          }, {
-            name: '福建',
-            value: randomData()
-          },
-          {
-            name: '贵州',
-            value: randomData()
-          }, {
-            name: '广东',
-            value: randomData()
-          },
-          {
-            name: '青海',
-            value: randomData()
-          }, {
-            name: '西藏',
-            value: randomData()
-          },
-          {
-            name: '四川',
-            value: randomData()
-          }, {
-            name: '宁夏',
-            value: randomData()
-          },
-          {
-            name: '海南',
-            value: randomData()
-          }, {
-            name: '台湾',
-            value: randomData()
-          },
-          {
-            name: '香港',
-            value: randomData()
-          }, {
-            name: '澳门',
-            value: randomData()
-          }
-        ];
-
         var option = {
           backgroundColor: '#FFFFFF',
           title: {

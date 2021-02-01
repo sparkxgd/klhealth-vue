@@ -1,237 +1,109 @@
 <template>
-  <el-dialog
-    title="添加学生"
-    :close-on-click-modal="false"
-    :visible.sync="visible">
+  <el-dialog title="添加学生" :close-on-click-modal="false" :visible.sync="visible">
 
-    <el-row :gutter="12">
-      <el-col :span="8">
-        <el-card shadow="always">
-          总是显示
-        </el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card shadow="always">
-          鼠标悬浮时显示
-        </el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card shadow="always">
-          从不显示
-        </el-card>
-      </el-col>
+    <el-row :gutter="20">
+      <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
+
+        <el-form-item label="学号" prop="stu_no">
+          <el-input v-model="dataForm.stu_no" placeholder="学号"></el-input>
+        </el-form-item>
+
+        <el-form-item label="班级" prop="class_name">
+          <el-input readonly="readonly" v-model="dataForm.class_name" placeholder="班级,外键，班级表id"></el-input>
+        </el-form-item>
+
+        <el-form-item label="状态" prop="status">
+          <el-select v-model="dataForm.status" placeholder="请选择状态">
+            <el-option label="正常" value="0"></el-option>
+            <el-option label="异常" value="-1"></el-option>
+            <el-option label="退出" value="1"></el-option>
+            <el-option label="休学" value="2"></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="dataForm.username" placeholder="用户名"></el-input>
+        </el-form-item>
+
+        <el-form-item label="真实姓名" prop="ral_name">
+          <el-input v-model="dataForm.ral_name" placeholder="真实姓名"></el-input>
+        </el-form-item>
+
+        <el-button type="primary" @click="onSubmit">添加</el-button>
+        <el-button @click="visible = false">取消</el-button>
+      </el-form>
     </el-row>
-
-    <p style="text-align: center; margin: 0 0 20px">使用 render-content 自定义数据项</p>
-    <div style="text-align: center">
-      <el-transfer
-        style="text-align: left; display: inline-block"
-        v-model="value"
-        filterable
-        :left-default-checked="[2, 3]"
-        :right-default-checked="[1]"
-        :render-content="renderFunc"
-        :titles="['Source', 'Target']"
-        :button-texts="['到左边', '到右边']"
-        :format="{
-        noChecked: '${total}',
-        hasChecked: '${checked}/${total}'
-      }"
-        @change="handleChange"
-        :data="data">
-        <el-button class="transfer-footer" slot="left-footer" size="small">操作</el-button>
-        <el-button class="transfer-footer" slot="right-footer" size="small">操作</el-button>
-      </el-transfer>
-    </div>
-    <p style="text-align: center; margin: 50px 0 20px">使用 scoped-slot 自定义数据项</p>
-    <div style="text-align: center">
-      <el-transfer
-        style="text-align: left; display: inline-block"
-        v-model="value4"
-        filterable
-        :left-default-checked="[2, 3]"
-        :right-default-checked="[1]"
-        :titles="['Source', 'Target']"
-        :button-texts="['到左边', '到右边']"
-        :format="{
-        noChecked: '${total}',
-        hasChecked: '${checked}/${total}'
-      }"
-        @change="handleChange"
-        :data="data">
-        <span slot-scope="{ option }">{{ option.key }} - {{ option.label }}</span>
-        <el-button class="transfer-footer" slot="left-footer" size="small">操作</el-button>
-        <el-button class="transfer-footer" slot="right-footer" size="small">操作</el-button>
-      </el-transfer>
-    </div>
-
-
-
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">取消</el-button>
-      <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
-    </span>
   </el-dialog>
 </template>
 
 <script>
-  import { treeDataTranslate } from '@/utils'
   export default {
-    data () {
-      const generateData = _ => {
-        const data = []
-        for (let i = 1; i <= 15; i++) {
-          data.push({
-            key: i,
-            label: `备选项 ${ i }`,
-            disabled: i % 4 === 0
-          })
-        }
-        return data
-      }
+    data() {
       return {
-        data: generateData(),
-        value: [1],
-        value4: [1],
-        renderFunc (h, option) {
-          return '<span>{ option.key } - { option.label }</span>'
-        },
         visible: false,
         dataForm: {
-          id: 0,
-          major: '',
-          parentId: 0,
-          parentName: '',
-          name: '',
-          no: '',
-          grade: '',
-          graduateTime: '',
-          desc: ''
+          stu_no: '',
+          class_id: '',
+          status: '',
+          username: '',
+          ral_name: '',
+          class_name: ''
         },
         dataRule: {
-          major: [
-            { required: true, message: '专业不能为空', trigger: 'blur' }
-          ],
-          name: [
-            { required: true, message: '名称不能为空', trigger: 'blur' }
-          ],
-          no: [
-            { required: true, message: '编号不能为空', trigger: 'blur' }
-          ],
-          grade: [
-            { required: true, message: '年级,例如2018不能为空', trigger: 'blur' }
-          ],
-          graduateTime: [
-            { required: true, message: '毕业时间不能为空', trigger: 'blur' }
-          ]
-        },
-        tableData: [{
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-08',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-06',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-07',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }],
-        multipleSelection: [],
-        menuList: [],
-        menuListTreeProps: {
-          label: 'name',
-          children: 'children'
+          stu_no: [{
+            required: true,
+            message: '学号不能为空',
+            trigger: 'blur'
+          }],
+          class_id: [{
+            required: true,
+            message: '班级ID不能为空',
+            trigger: 'blur'
+          }],
+          status: [{
+            required: true,
+            message: '请选择状态',
+            trigger: 'blur'
+          }],
+          username: [{
+            required: true,
+            message: '用户名不能为空',
+            trigger: 'blur'
+          }],
+          ral_name: [{
+            required: true,
+            message: '真实姓名不能为空',
+            trigger: 'blur'
+          }]
         }
       }
     },
     methods: {
-      init (id) {
-        this.dataForm.id = id || 0
-        this.$http({
-          url: this.$http.adornUrl('/epi/dept/select'),
-          method: 'get',
-          params: this.$http.adornParams()
-        }).then(({data}) => {
-          this.menuList = treeDataTranslate(data.menuList, 'id')
-        }).then(() => {
-          this.visible = true
-          this.$nextTick(() => {
-            this.$refs['dataForm'].resetFields()
-          })
-        }).then(() => {
-          if (!this.dataForm.id) {
-            // 新增
-            this.menuListTreeSetCurrentNode()
-          } else {
-            // 修改
-            this.$http({
-              url: this.$http.adornUrl(`/epi/classes/info/${this.dataForm.id}`),
-              method: 'get',
-              params: this.$http.adornParams()
-            }).then(({data}) => {
-              this.dataForm.major = data.classes.major
-              this.dataForm.name = data.classes.name
-              this.dataForm.no = data.classes.no
-              this.dataForm.grade = data.classes.grade
-              this.dataForm.graduateTime = data.classes.graduateTime
-              this.dataForm.desc = data.classes.desc
-              this.menuListTreeSetCurrentNode()
-            })
-          }
-        })
+      init(data) {
+        this.visible = true
+        if(data){
+          this.dataForm.class_id = data.id
+          this.dataForm.class_name=data.name
+        }
       },
-      handleChange(value, direction, movedKeys) {
-        console.log(value, direction, movedKeys);
-      },
-      handleSelectionChange (val) {
-        this.multipleSelection = val
-      },
-      // 菜单树选中
-      menuListTreeCurrentChangeHandle (data, node) {
-        this.dataForm.parentId = data.id
-        this.dataForm.parentName = data.name
-        this.dataForm.major = data.id
-      },
-      // 菜单树设置当前选中节点
-      menuListTreeSetCurrentNode () {
-        this.$refs.menuListTree.setCurrentKey(this.dataForm.parentId)
-        this.dataForm.parentName = (this.$refs.menuListTree.getCurrentNode() || {})['name']
-      },
-      // 表单提交
-      dataFormSubmit () {
+      /* 提交数据*/
+      onSubmit() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
+            var data={};
+            data.no=this.dataForm.stu_no;
+            data.clsId=this.dataForm.class_id;
+            data.status=this.dataForm.status;
+            data.username=this.dataForm.username;
+            data.name=this.dataForm.ral_name;
+            data.clsName=this.dataForm.class_name;
             this.$http({
-              url: this.$http.adornUrl(`/epi/classes/${!this.dataForm.id ? 'save' : 'update'}`),
+              url: this.$http.adornUrl('/epi/studentclasses/save'),
               method: 'post',
-              data: this.$http.adornData({
-                'id': this.dataForm.id || undefined,
-                'major': this.dataForm.major,
-                'name': this.dataForm.name,
-                'no': this.dataForm.no,
-                'grade': this.dataForm.grade,
-                'graduateTime': this.dataForm.graduateTime,
-                'desc': this.dataForm.desc,
-              })
-            }).then(({data}) => {
+              data: this.$http.adornData(data)
+            }).then(({
+              data
+            }) => {
               if (data && data.code === 0) {
                 this.$message({
                   message: '操作成功',
@@ -248,6 +120,7 @@
             })
           }
         })
+
       }
     }
   }

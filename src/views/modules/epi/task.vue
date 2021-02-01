@@ -22,67 +22,77 @@
         align="center"
         width="50">
       </el-table-column>
-      <el-table-column
-        prop="id"
-        header-align="center"
-        align="center"
-        label="ID">
-      </el-table-column>
+
       <el-table-column
         prop="taskType"
         header-align="center"
         align="center"
-        label="任务类型">
+        label="任务类型"
+        width="80">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.taskType === 0" size="small" type="danger">作业</el-tag>
           <el-tag v-else-if="scope.row.taskType === 1" size="small" type="danger">预留</el-tag>
         </template>
       </el-table-column>
+
       <el-table-column
         prop="title"
         header-align="center"
         align="center"
-        label="任务标题">
+        label="任务标题"
+        width="180">
       </el-table-column>
+
       <el-table-column
         prop="desc"
         header-align="center"
         align="center"
-        label="任务描述">
+        label="任务描述"
+        width="80">
       </el-table-column>
+
       <el-table-column
         prop="name"
         header-align="center"
         align="center"
-        label="创建任务人">
+        label="创建任务人"
+        width="100">
       </el-table-column>
+
       <el-table-column
         prop="startTime"
         header-align="center"
         align="center"
-        label="开始时间">
+        label="开始时间"
+        width="180">
       </el-table-column>
+
       <el-table-column
         prop="endTime"
         header-align="center"
         align="center"
-        label="结束时间">
+        label="结束时间"
+        width="180">
       </el-table-column>
+
       <el-table-column
         prop="sandType"
         header-align="center"
         align="center"
-        label="类型">
+        label="类型"
+        width="80">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.sandType === 1" size="small" type="danger">紧急</el-tag>
           <el-tag v-else size="small">一般</el-tag>
         </template>
       </el-table-column>
+
       <el-table-column
         prop="status"
         header-align="center"
         align="center"
-        label="状态">
+        label="状态"
+        width="80">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.status === 0" size="small" type="danger">未执行</el-tag>
           <el-tag v-else-if="scope.row.status === 1" size="small" type="danger">执行中</el-tag>
@@ -91,17 +101,18 @@
           <el-tag v-else size="small" type="danger">异常</el-tag>
         </template>
       </el-table-column>
+
       <el-table-column
         prop="remark"
         header-align="center"
         align="center"
-        label="备注">
+        label="备注"
+        width="100">
       </el-table-column>
+
       <el-table-column
-        fixed="right"
         header-align="center"
         align="center"
-        width="150"
         label="操作">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>

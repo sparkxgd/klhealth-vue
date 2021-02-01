@@ -22,74 +22,81 @@
         align="center"
         width="50">
       </el-table-column>
-      <el-table-column
-        prop="id"
-        header-align="center"
-        align="center"
-        label="ID"
-        width="50">
-      </el-table-column>
 
       <el-table-column
         prop="name"
         header-align="center"
         align="center"
-        label="班级名称">
+        label="班级名称"
+        width="100">
       </el-table-column>
+
       <el-table-column
         prop="majorName"
         header-align="center"
         align="center"
-        label="所属专业">
+        label="所属专业"
+        width="100">
       </el-table-column>
+
       <el-table-column
         prop="no"
         header-align="center"
         align="center"
-        label="班级编号">
+        label="班级编号"
+        width="100">
       </el-table-column>
+
       <el-table-column
         prop="grade"
         header-align="center"
         align="center"
-        label="年级">
+        label="年级"
+        width="100">
       </el-table-column>
+
       <el-table-column
         prop="graduateTime"
         header-align="center"
         align="center"
-        label="毕业时间">
+        label="毕业时间"
+        width="100">
       </el-table-column>
+
       <el-table-column
         prop="updateTime"
         header-align="center"
         align="center"
-        label="更新时间">
+        label="更新时间"
+        width="180">
       </el-table-column>
+
       <el-table-column
         prop="desc"
         header-align="center"
         align="center"
-        label="描述">
+        label="描述"
+        width="100">
       </el-table-column>
+
       <el-table-column
         prop="status"
         header-align="center"
         align="center"
-        label="状态">
+        label="状态"
+        width="100">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.status === -1" size="small" type="danger">异常</el-tag>
           <el-tag v-else size="small">正常</el-tag>
         </template>
       </el-table-column>
+
       <el-table-column
-        fixed="right"
         header-align="center"
         align="center"
-        width="250"
         label="操作">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="addStudentHandle(scope.row.id)">添加学生</el-button>
+          <el-button type="primary" size="mini" @click="addStudentHandle(scope.row)">添加学生</el-button>
           <el-button type="success" size="mini" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
           <el-button type="danger" size="mini" @click="deleteHandle(scope.row.id)">删除</el-button>
         </template>

@@ -11,39 +11,49 @@
       </el-form-item>
     </el-form>
     <el-table :data="dataList" border v-loading="dataListLoading" @selection-change="selectionChangeHandle" style="width: 100%;">
+
       <el-table-column type="selection" header-align="center" align="center" width="50">
       </el-table-column>
-      <el-table-column prop="healthImg" header-align="center" align="center" label="健康码">
+
+      <el-table-column prop="healthImg" header-align="center" align="center" label="健康码" width="200">
         <template slot-scope="scope">
-          <img :src="scope.row.healthImg">
+          <img :src="scope.row.healthImg" style="width: 170px;">
         </template>
       </el-table-column>
-      <el-table-column prop="position" header-align="center" align="center" label="经纬度">
+
+      <el-table-column prop="position" header-align="center" align="center" label="经纬度" width="100">
       </el-table-column>
-      <el-table-column prop="temperature" header-align="center" align="center" label="体温">
+
+      <el-table-column prop="temperature" header-align="center" align="center" label="体温" width="100">
       </el-table-column>
-      <el-table-column prop="isnormal" header-align="center" align="center" label="是否正常">
+
+      <el-table-column prop="isnormal" header-align="center" align="center" label="是否正常" width="100">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.isnormal === 0" size="small" type="danger">异常</el-tag>
           <el-tag v-else size="small">正常</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="isCatDangerous" header-align="center" align="center" label="是否与风险人员接触">
+
+      <el-table-column prop="isCatDangerous" header-align="center" align="center" label="是否与风险人员接触" width="100">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.isCatDangerous === 1" size="small" type="danger">是</el-tag>
           <el-tag v-else size="small">否</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="zoneAction" header-align="center" align="center" label="活动区域">
+
+      <el-table-column prop="zoneAction" header-align="center" align="center" label="活动区域" width="100">
       </el-table-column>
-      <el-table-column prop="remark" header-align="center" align="center" label="备注">
+
+      <el-table-column prop="remark" header-align="center" align="center" label="备注" width="100">
       </el-table-column>
-      <el-table-column fixed="right" header-align="center" align="center" width="150" label="操作">
+
+      <el-table-column header-align="center" align="center" label="操作">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
           <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
+
     </el-table>
     <el-pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" :current-page="pageIndex"
       :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" :total="totalPage" layout="total, sizes, prev, pager, next, jumper">
@@ -92,6 +102,7 @@
           data
         }) => {
           if (data && data.code === 0) {
+            console.log(data)
             this.dataList = data.page.list
             this.totalPage = data.page.totalCount
           } else {

@@ -4,16 +4,16 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
-    <el-form-item label="被管理班级	外键，班级表id" prop="claId">
+    <el-form-item label="班级" prop="claId">
       <el-input v-model="dataForm.claId" placeholder="被管理班级	外键，班级表id"></el-input>
     </el-form-item>
-    <el-form-item label="管理人（班主任，辅导员）	外键，user表id" prop="userId">
+    <el-form-item label="班主任" prop="userId">
       <el-input v-model="dataForm.userId" placeholder="管理人（班主任，辅导员）	外键，user表id"></el-input>
     </el-form-item>
     <el-form-item label="创建时间" prop="createTime">
       <el-input v-model="dataForm.createTime" placeholder="创建时间"></el-input>
     </el-form-item>
-    <el-form-item label="状态	0：正常，-1：异常" prop="status">
+    <el-form-item label="状态" prop="status">
       <el-input v-model="dataForm.status" placeholder="状态	0：正常，-1：异常"></el-input>
     </el-form-item>
     </el-form>

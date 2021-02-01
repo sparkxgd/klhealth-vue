@@ -16,47 +16,61 @@
       v-loading="dataListLoading"
       @selection-change="selectionChangeHandle"
       style="width: 100%;">
+
       <el-table-column
         prop="no"
         header-align="center"
         align="center"
-        label="学号">
+        label="学号"
+        width="100">
       </el-table-column>
+
       <el-table-column
         prop="name"
         header-align="center"
         align="center"
-        label="姓名">
+        label="姓名"
+        width="100">
       </el-table-column>
+
       <el-table-column
         prop="clsName"
         header-align="center"
         align="center"
-        label="班级">
+        label="班级"
+        width="180">
       </el-table-column>
+
       <el-table-column
         prop="addTime"
         header-align="center"
         align="center"
-        label="加入时间">
+        label="加入时间"
+        width="180">
       </el-table-column>
+
       <el-table-column
         prop="exitTime"
         header-align="center"
         align="center"
-        label="退出时间">
+        label="退出时间"
+        width="180">
       </el-table-column>
+
       <el-table-column
         prop="updateTime"
         header-align="center"
         align="center"
-        label="更新时间">
+        label="更新时间"
+        width="180">
       </el-table-column>
+
       <el-table-column
         prop="status"
         header-align="center"
         align="center"
-        label="状态">
+        label="状态"
+        width="80">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.status === -1" size="small" type="danger">异常</el-tag>
           <el-tag v-else-if="scope.row.status === 0" size="small" type="danger">正常</el-tag>
@@ -64,14 +78,13 @@
           <el-tag v-else size="small">休学</el-tag>
         </template>
       </el-table-column>
+
       <el-table-column
-        fixed="right"
         header-align="center"
         align="center"
-        width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
+          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row)">修改</el-button>
           <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
@@ -127,6 +140,7 @@
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
+            console.log(data)
             this.dataList = data.page.list
             this.totalPage = data.page.totalCount
           } else {
@@ -152,10 +166,10 @@
         this.dataListSelections = val
       },
       // 新增 / 修改
-      addOrUpdateHandle (id) {
+      addOrUpdateHandle (row) {
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
-          this.$refs.addOrUpdate.init(id)
+          this.$refs.addOrUpdate.init(row)
         })
       },
       // 删除

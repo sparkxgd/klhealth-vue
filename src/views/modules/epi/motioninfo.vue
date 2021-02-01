@@ -15,50 +15,60 @@
       v-loading="dataListLoading"
       @selection-change="selectionChangeHandle"
       style="width: 100%;">
+      
       <el-table-column
         type="selection"
         header-align="center"
         align="center"
         width="50">
       </el-table-column>
+      
       <el-table-column
         prop="userId"
         header-align="center"
         align="center"
-        label="用户(姓名)">
+        label="用户(姓名)"
+        width="180">
         <template slot-scope="scope">
           {{scope.row.username}}({{scope.row.name}})
         </template>
       </el-table-column>
+      
       <el-table-column
         prop="steps"
         header-align="center"
         align="center"
-        label="运动步数">
+        label="运动步数"
+        width="100">
       </el-table-column>
+      
       <el-table-column
         prop="startTime"
         header-align="center"
         align="center"
-        label="运动开始时间">
+        label="运动开始时间"
+        width="180">
       </el-table-column>
+      
       <el-table-column
         prop="endTime"
         header-align="center"
         align="center"
-        label="运动结束时间">
+        label="运动结束时间"
+        width="180">
       </el-table-column>
+      
       <el-table-column
         prop="remark"
         header-align="center"
         align="center"
-        label="备注">
+        label="备注"
+        width="100">
       </el-table-column>
+      
       <el-table-column
-        fixed="right"
         header-align="center"
         align="center"
-        width="150"
         label="操作">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>

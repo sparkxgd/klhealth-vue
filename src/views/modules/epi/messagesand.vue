@@ -16,53 +16,59 @@
       v-loading="dataListLoading"
       @selection-change="selectionChangeHandle"
       style="width: 100%;">
+      
       <el-table-column
         type="selection"
         header-align="center"
         align="center"
         width="50">
       </el-table-column>
-      <el-table-column
-        prop="id"
-        header-align="center"
-        align="center"
-        label="主键">
-      </el-table-column>
+      
+      <!-- 外键 epi_message表id-->
       <el-table-column
         prop="msgId"
         header-align="center"
         align="center"
-        label="外键 epi_message表id">
+        label="消息ID">
       </el-table-column>
+      
+      <!-- 发送给谁 user表id-->
       <el-table-column
         prop="userId"
         header-align="center"
         align="center"
-        label="发送给谁 user表id">
+        label="接收人">
       </el-table-column>
+      
+      <!-- 消息状态 0：待接收 1：已接收-->
       <el-table-column
         prop="status"
         header-align="center"
         align="center"
-        label="消息状态 0：待接收 1：已接收">
+        label="消息状态">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.status==0">待接收</el-tag>
+          <el-tag v-else>已接收</el-tag>
+        </template>
       </el-table-column>
+      
       <el-table-column
         prop="sandTime"
         header-align="center"
         align="center"
         label="接收时间">
       </el-table-column>
+      
       <el-table-column
         prop="remark"
         header-align="center"
         align="center"
         label="备注">
       </el-table-column>
+      
       <el-table-column
-        fixed="right"
         header-align="center"
         align="center"
-        width="150"
         label="操作">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>

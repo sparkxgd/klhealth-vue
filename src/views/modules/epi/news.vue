@@ -26,19 +26,22 @@
         prop="title"
         header-align="center"
         align="center"
-        label="标题">
+        label="标题"
+        width="100">
       </el-table-column>
       <el-table-column
         prop="newsType"
         header-align="center"
         align="center"
-        label="新闻类型">
+        label="新闻类型"
+        width="50">
       </el-table-column>
       <el-table-column
         prop="type"
         header-align="center"
         align="center"
-        label="类型">
+        label="类型"
+        width="100">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.type === 1" size="small" type="danger">原创</el-tag>
           <el-tag v-else-if="scope.row.type === 2" size="small" type="danger">转载</el-tag>
@@ -49,31 +52,36 @@
         prop="author"
         header-align="center"
         align="center"
-        label="作者">
+        label="作者"
+        width="80">
       </el-table-column>
       <el-table-column
         prop="reviewerName"
         header-align="center"
         align="center"
-        label="审核人">
+        label="审核人"
+        width="100">
       </el-table-column>
       <el-table-column
         prop="rviewTime"
         header-align="center"
         align="center"
-        label="审核时间">
+        label="审核时间"
+        width="100">
       </el-table-column>
       <el-table-column
         prop="releaseTime"
         header-align="center"
         align="center"
-        label="发布时间">
+        label="发布时间"
+        width="100">
       </el-table-column>
       <el-table-column
         prop="status"
         header-align="center"
         align="center"
-        label="状态">
+        label="状态"
+        width="80">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.status === -1" size="small" type="danger">异常</el-tag>
           <el-tag v-else-if="scope.row.status === 0" size="small" type="danger">待审核</el-tag>
@@ -85,19 +93,22 @@
         prop="createrName"
         header-align="center"
         align="center"
-        label="创建者">
+        label="创建者"
+        width="100">
       </el-table-column>
       <el-table-column
         prop="ceateTime"
         header-align="center"
         align="center"
-        label="创建时间">
+        label="创建时间"
+        width="100">
       </el-table-column>
       <el-table-column
         prop="lookNum"
         header-align="center"
         align="center"
-        label="浏览量">
+        label="浏览量"
+        width="50">
       </el-table-column>
       <el-table-column
         prop="remark"
@@ -106,10 +117,8 @@
         label="备注">
       </el-table-column>
       <el-table-column
-        fixed="right"
         header-align="center"
         align="center"
-        width="150"
         label="操作">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
