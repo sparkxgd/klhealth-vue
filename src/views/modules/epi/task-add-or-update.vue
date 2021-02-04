@@ -4,32 +4,55 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
-      <el-form-item label="任务类型" prop="taskType">
-        <el-input v-model="dataForm.taskType" placeholder="任务类型，预留，0：作业"></el-input>
-      </el-form-item>
+
       <el-form-item label="任务标题" prop="title">
         <el-input v-model="dataForm.title" placeholder="任务标题"></el-input>
       </el-form-item>
-      <el-form-item label="任务描述" prop="desc">
-        <el-input v-model="dataForm.desc" placeholder="任务描述"></el-input>
-      </el-form-item>
-      <el-form-item label="创建任务人" prop="userId">
-        <el-input v-model="dataForm.userId" placeholder="外键user表id"></el-input>
+      <el-form-item label="任务类型" prop="taskType">
+        <el-radio-group v-model="dataForm.taskType">
+          <el-radio
+            :label="0"
+          >作业</el-radio>
+          <el-radio
+            :label="1"
+          >其他</el-radio>
+        </el-radio-group>
+
       </el-form-item>
       <el-form-item label="开始时间" prop="startTime">
-        <el-input v-model="dataForm.startTime" placeholder="开始时间"></el-input>
+        <el-date-picker type="datetime"  v-model="dataForm.startTime" placeholder="开始时间" value-format="yyyy-MM-dd HH:mm:ss"    style="width: 100%;"></el-date-picker>
       </el-form-item>
       <el-form-item label="结束时间" prop="endTime">
-        <el-input v-model="dataForm.endTime" placeholder="结束时间"></el-input>
+        <el-date-picker type="datetime"  v-model="dataForm.endTime" placeholder="结束时间" value-format="yyyy-MM-dd HH:mm:ss"    style="width: 100%;"></el-date-picker>
       </el-form-item>
-      <el-form-item label="类型" prop="sandType">
-        <el-input v-model="dataForm.sandType" placeholder="类型 0：一般 1：紧急"></el-input>
+      <el-form-item label="发送类型" prop="sandType">
+        <el-radio-group v-model="dataForm.sandType">
+          <el-radio
+            :label="0"
+          >一般</el-radio>
+          <el-radio
+            :label="1"
+          >紧急</el-radio>
+        </el-radio-group>
       </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-input v-model="dataForm.status" placeholder="状态 0：未执行 1：执行中 2：完成 3：未完成 -1：异常"></el-input>
+      <el-form-item label="发送目标" prop="sandTarget">
+        <el-radio-group v-model="dataForm.sandTarget">
+          <el-radio
+            :label="0"
+          >所有用户</el-radio>
+          <el-radio
+            :label="1"
+          >学生</el-radio>
+          <el-radio
+            :label="2"
+          >教师</el-radio>
+          <el-radio
+            :label="3"
+          >其他</el-radio>
+        </el-radio-group>
       </el-form-item>
-      <el-form-item label="备注" prop="remark">
-        <el-input v-model="dataForm.remark" placeholder="备注"></el-input>
+      <el-form-item label="任务描述" prop="desc">
+        <el-input v-model="dataForm.desc" placeholder="任务描述"></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -46,13 +69,14 @@
         visible: false,
         dataForm: {
           id: 0,
-          taskType: '',
+          taskType: 0,
+          sandTarget: 0,
           title: '',
           desc: '',
           userId: '',
           startTime: '',
           endTime: '',
-          sandType: '',
+          sandType: 0,
           status: '',
           remark: ''
         },
@@ -66,8 +90,8 @@
           desc: [
             { required: true, message: '任务描述不能为空', trigger: 'blur' }
           ],
-          userId: [
-            { required: true, message: '创建任务人不能为空', trigger: 'blur' }
+          sandTarget: [
+            { required: true, message: '发送目标不能为空', trigger: 'blur' }
           ],
           startTime: [
             { required: true, message: '开始时间不能为空', trigger: 'blur' }
@@ -97,11 +121,10 @@
                 this.dataForm.taskType = data.task.taskType
                 this.dataForm.title = data.task.title
                 this.dataForm.desc = data.task.desc
-                this.dataForm.userId = data.task.userId
                 this.dataForm.startTime = data.task.startTime
                 this.dataForm.endTime = data.task.endTime
                 this.dataForm.sandType = data.task.sandType
-                this.dataForm.status = data.task.status
+                this.dataForm.sandTarget = data.task.sandTarget
                 this.dataForm.remark = data.task.remark
               }
             })
@@ -120,11 +143,10 @@
                 'taskType': this.dataForm.taskType,
                 'title': this.dataForm.title,
                 'desc': this.dataForm.desc,
-                'userId': this.dataForm.userId,
                 'startTime': this.dataForm.startTime,
                 'endTime': this.dataForm.endTime,
                 'sandType': this.dataForm.sandType,
-                'status': this.dataForm.status,
+                'sandTarget': this.dataForm.sandTarget,
                 'remark': this.dataForm.remark
               })
             }).then(({data}) => {

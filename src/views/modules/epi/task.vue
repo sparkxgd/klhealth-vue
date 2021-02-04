@@ -44,21 +44,18 @@
       </el-table-column>
 
       <el-table-column
-        prop="desc"
+        prop="sandTarget"
         header-align="center"
         align="center"
-        label="任务描述"
+        label="发布目标"
         width="80">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.sandTarget === 0" size="small" type="warning">所有用户</el-tag>
+          <el-tag v-else-if="scope.row.sandTarget === 1" size="small" type="success">学生</el-tag>
+          <el-tag v-else-if="scope.row.sandTarget === 2" size="small">教师</el-tag>
+          <el-tag v-else size="small" type="warning">其他</el-tag>
+        </template>
       </el-table-column>
-
-      <el-table-column
-        prop="name"
-        header-align="center"
-        align="center"
-        label="创建任务人"
-        width="100">
-      </el-table-column>
-
       <el-table-column
         prop="startTime"
         header-align="center"
@@ -94,14 +91,27 @@
         label="状态"
         width="80">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.status === 0" size="small" type="danger">未执行</el-tag>
-          <el-tag v-else-if="scope.row.status === 1" size="small" type="danger">执行中</el-tag>
-          <el-tag v-else-if="scope.row.status === 2" size="small">完成</el-tag>
-          <el-tag v-else-if="scope.row.status === 3" size="small" type="danger">未完成</el-tag>
+          <el-tag v-if="scope.row.status === 0" size="small" type="info">未执行</el-tag>
+          <el-tag v-else-if="scope.row.status === 1" size="small" type="warning">执行中</el-tag>
+          <el-tag v-else-if="scope.row.status === 2" size="small" type="success">完成</el-tag>
+          <el-tag v-else-if="scope.row.status === 3" size="small" type="warning">未完成</el-tag>
           <el-tag v-else size="small" type="danger">异常</el-tag>
         </template>
       </el-table-column>
+      <el-table-column
+        prop="username"
+        header-align="center"
+        align="center"
+        label="创建任务人"
+        width="100">
+      </el-table-column>
 
+      <el-table-column
+        prop="desc"
+        header-align="center"
+        align="center"
+        label="任务描述">
+      </el-table-column>
       <el-table-column
         prop="remark"
         header-align="center"
@@ -109,12 +119,13 @@
         label="备注"
         width="100">
       </el-table-column>
-
       <el-table-column
         header-align="center"
         align="center"
         label="操作">
         <template slot-scope="scope">
+          <el-button v-if="scope.row.status === 0" type="text" size="small" @click="startTask(scope.row.id)">开始执行</el-button>
+
           <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
           <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
         </template>
@@ -200,6 +211,33 @@
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(id)
+        })
+      },
+      // 执行任务
+      startTask (id) {
+        this.$confirm(`确定对任务[id=${id}]开始执行操作?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http({
+            url: this.$http.adornUrl('/epi/task/startTask'),
+            method: 'post',
+            data: this.$http.adornData(id, false)
+          }).then(({data}) => {
+            if (data && data.code === 0) {
+              this.$message({
+                message: data.msg,
+                type: 'success',
+                duration: 1500,
+                onClose: () => {
+                  this.getDataList()
+                }
+              })
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
         })
       },
       // 删除
